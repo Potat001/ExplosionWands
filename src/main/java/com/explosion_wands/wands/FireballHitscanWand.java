@@ -54,7 +54,7 @@ public class FireballHitscanWand extends Item {
         int inflate = 100;
         int explosionPowerAir = 10;
         //Think it's fair and more fun to make the explosion power much higher when clicking on entities
-        float explosionPowerEntity = 80F;
+        float explosionPowerEntity = 50F;
         float explosionPowerOther = 30F;
         int particleColor1 = 16711680;
         int particleColor2 = 500000;
@@ -70,17 +70,24 @@ public class FireballHitscanWand extends Item {
         Vec3 playerEndDirEntities = playerStartDir.add(playerLookDir.scale(reachEntities));
         Vec3 playerEndDirBlocks = playerStartDir.add(playerLookDir.scale(reachBlocks));
         playerLookDir.add(dirX, dirY, dirZ).normalize();
-        LargeFireball fireballAir = new LargeFireball(level, player, playerLookDir, explosionPowerAir);
+        LargeFireball fireballAir = new LargeFireball(
+                level,
+                player,
+                playerLookDir,
+                explosionPowerAir);
         //Target entity
         EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                level, fireballAir, playerStartDir, playerEndDirEntities, player.getBoundingBox()
-                        .expandTowards(playerLookDir.scale(reachEntities)).inflate(inflate),
-                //Couldn't hit non-living entities before, like boats, so replaced it with any type of entity
+                level,
+                fireballAir,
+                playerStartDir,
+                playerEndDirEntities,
+                player.getBoundingBox().expandTowards(playerLookDir.scale(reachEntities)).inflate(inflate),
+                //Makes it so that we can hit any type of entity
                 entity -> entity instanceof Entity
-                        //Ensures that we can't hit the hitbox of dead entities
-                        && entity.isAlive()
-                        && !entity.isRemoved()
-                        && entity != player);
+                //Ensures that we can't hit the hitbox of dead entities
+                && entity.isAlive()
+                && !entity.isRemoved()
+                && entity != player);
         BlockHitResult blockHitResultEntities = level.clip(new ClipContext(
                 playerStartDir,
                 playerEndDirEntities,
@@ -137,13 +144,14 @@ public class FireballHitscanWand extends Item {
                         if(fireballAir.touchingUnloadedChunk()) {
                             fireballAir.discard();
                         }
-                        return fireballAir;
+                        //Since fireball gets removed before it's spawned into the world, we can just return null
+                        return null;
                     }
                 }
                 BlockPos targetBlocks = blockHitResultBlocks.getBlockPos();
                 if(level instanceof ServerLevel serverLevel) {
                     serverLevel.explode(fireballAir, targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(),
-                            explosionPowerOther, Level.ExplosionInteraction.MOB);
+                    explosionPowerOther, Level.ExplosionInteraction.MOB);
                     serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
                     serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
                     serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);

@@ -60,12 +60,12 @@ public class FireballWand extends Item {
         //Set's the fireball's velocity
         fireballAir.setDeltaMovement(playerLookDir.scale(velocity));
         fireballAir.addTag("fireball");
-        level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, volume, pitch);
         //Spawns the fireball
         if(fireballAir.touchingUnloadedChunk()) {
             fireballAir.discard();
         }
+        level.playSound(null, player.getX(), player.getY(), player.getZ(),
+        SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, volume, pitch);
         return fireballAir;
     }
 }

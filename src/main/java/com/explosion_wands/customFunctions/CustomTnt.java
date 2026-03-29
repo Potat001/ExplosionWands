@@ -1,4 +1,4 @@
-package com.explosion_wands.customFunctions.tnt;
+package com.explosion_wands.customFunctions;
 
 import com.explosion_wands.tick.TickQueue;
 import com.explosion_wands.tick.TickQueueManager;
@@ -6,7 +6,11 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +77,6 @@ public class CustomTnt extends PrimedTnt {
         //Inherits logic from tick(), where we only override what's specified under. Otherwise, we have to put *all* the logic that tick() uses here
         super.tick();
         if(shouldExplode()) {
-            onPreExplode();
             discardOnFirstUse();
             explode();
             onPostExplode();
@@ -82,9 +85,34 @@ public class CustomTnt extends PrimedTnt {
 
     //If the primed TNT should explode given *these* conditions
     protected boolean shouldExplode() {
+
         return ((getFuse() <= 0 && !level().isClientSide())
                 || ((this.horizontalCollision || this.verticalCollision)
+                || hitEntity()
                 && explodeOnContact));
+    }
+
+    //Determines if the customTnt has made contact with an entity's bounding box
+    protected boolean hitEntity() {
+        double dirX = this.getX();
+        double dirY = this.getY();
+        double dirZ = this.getZ();
+        int reachEntities = 128;
+        int inflate = 100;
+        Vec3 playerLookDir = this.getLookAngle();
+        playerLookDir.add(dirX, dirY, dirZ).normalize();
+        Vec3 customTntPos = new Vec3(getX(), getY(), getZ());
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                this,
+                customTntPos,
+                customTntPos,
+                this.getBoundingBox().expandTowards(playerLookDir.scale(reachEntities)).inflate(inflate),
+                entity -> entity instanceof Entity
+                && entity.isAlive()
+                && !entity.isRemoved()
+                && entity != this,
+                0);
+        return entityHitResult != null;
     }
 
     //Responsible for exploding the TNT at its current position
@@ -107,9 +135,6 @@ public class CustomTnt extends PrimedTnt {
 
             exploded = true;
         }
-    }
-    //What happens before the TNT explodes
-    protected void onPreExplode() {
     }
 
     //What happens after the explosion(s) occurs

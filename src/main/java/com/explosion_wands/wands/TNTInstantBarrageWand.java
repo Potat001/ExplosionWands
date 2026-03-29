@@ -1,17 +1,20 @@
 package com.explosion_wands.wands;
 
-import com.explosion_wands.customFunctions.tnt.CustomTnt;
+import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class TNTInstantBarrageWand {
@@ -21,7 +24,10 @@ public class TNTInstantBarrageWand {
             float volume = 0.4F;
             float pitch = 1.0F;
             int spawnHeight = 30;
-            int reach = 360;
+            int spawnHeightSound = 5;
+            int reachEntities = 128;
+            int reachBlocks = 512;
+            int inflate = 100;
             int tntAmount = 80;
             //Makes the start spawn angle of the TNT be equal to the direction the player is facing (default (0): east)
             final double[] angle = {Math.toRadians(player.getYRot() + 90)};
@@ -35,7 +41,20 @@ public class TNTInstantBarrageWand {
             double defaultGravity = 0.04;
             Vec3 playerEyeStart = player.getEyePosition();
             Vec3 playerLookAngle = player.getLookAngle();
-            Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reach));
+            Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlocks));
+            CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
+            assert customTnt != null;
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                    level,
+                    customTnt,
+                    playerEyeStart,
+                    playerEyeEnd,
+                    player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
+                    entity -> entity instanceof Entity
+                    && entity.isAlive()
+                    && !entity.isRemoved()
+                    && entity != player,
+                    0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -44,10 +63,13 @@ public class TNTInstantBarrageWand {
                     player
             ));
             BlockPos target = blockHitResult.getBlockPos();
+            if(entityHitResult != null) {
+                target = entityHitResult.getEntity().blockPosition();
+            }
             final double[] changePosition = {initialPos}; //Initial position of the starting TNT
             for (int i = 0; i < tntAmount; i++) {
                 //Creates primed TNTs every iteration
-                CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
+                customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
                 //X dir: cos, Z dir: sin, makes a circle
                 if (customTnt != null) {
                     customTnt.setPos(target.getX() + (Math.cos(angle[angleValue]) * amplitude),
@@ -68,10 +90,9 @@ public class TNTInstantBarrageWand {
                     changePosition[angleValue] += Math.PI / ((double) (tntAmount / 4) / 2);
                 }
             }
-            //Plays a sound when a block is clicked
             level.playSound(null,
                     target.getX(),
-                    target.getY() + spawnHeight,
+                    target.getY() + spawnHeightSound,
                     target.getZ(),
                     SoundEvents.TNT_PRIMED,
                     SoundSource.PLAYERS,

@@ -38,7 +38,10 @@ public class ExplosionEntities {
     public static double r = 2;
     public static int spawnHeight = 20;
     //How far we can spawn entities from the player's current position
-    public static int reach = 360;
+    public static int reachEntities = 128;
+    public static int reachBlock = 512;
+    public static int inflate = 100;
+
     //Calculates the amount of entities that are spawned before the for loops are set in motion (you want this along with maxEntities)
     public static int spawnedEntities = (int) ((Math.floor(lessThanTheta / incrementTheta) + 1) * (Math.floor(lessThanPhi / incrementPhi) + 1));
 

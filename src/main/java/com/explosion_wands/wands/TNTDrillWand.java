@@ -1,6 +1,6 @@
 package com.explosion_wands.wands;
 
-import com.explosion_wands.customFunctions.tnt.CustomTnt;
+import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -55,13 +55,10 @@ public class TNTDrillWand extends Item {
                         .add(playerLookDir.scale(scale));
                 customTnt.moveOrInterpolateTo(customTntInAirPosition);
                 } else {
-                //Works for the most part
                 Vec3 customTntInAirPosition = blockHitResult.getLocation();
                 customTnt.moveOrInterpolateTo(customTntInAirPosition);
                 }
                 customTnt.setDeltaMovement(playerLookDir.scale(velocity));
-                level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                        SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
                 customTnt.setDiscardOnFirstUse(discardOnFirstUse);
                 customTnt.setExplodeOnContact(explodeOnContact);
                 customTnt.setExplosionPower(explosionPower);
@@ -69,6 +66,8 @@ public class TNTDrillWand extends Item {
                 if(customTnt.touchingUnloadedChunk()) {
                 customTnt.discard();
                 }
+                level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
                 return customTnt;
             }
         return null;

@@ -1,6 +1,6 @@
 package com.explosion_wands.wands;
 
-import com.explosion_wands.customFunctions.tnt.CustomTnt;
+import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -68,8 +68,7 @@ public class TNTChickenWand extends Item {
                 customTnt.moveOrInterpolateTo(customTntInAirPosition);
             }
                 customTnt.setDeltaMovement(playerLookDir.scale(velocity));
-                level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                        SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
+
                 customTnt.setDiscardOnFirstUse(discardFirstUse);
                 customTnt.setExplodeOnContact(explodeOnContact);
                 customTnt.setExplosionPower(explosionPower);
@@ -83,6 +82,8 @@ public class TNTChickenWand extends Item {
                 if(customTnt.touchingUnloadedChunk()) {
                     customTnt.discard();
                 }
+                level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
                 return customTnt;
             }
             return null;

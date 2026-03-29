@@ -1,6 +1,6 @@
 package com.explosion_wands.entity;
 
-import com.explosion_wands.customFunctions.tnt.CustomTnt;
+import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.initialization.ModInitialization;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

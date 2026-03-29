@@ -1,18 +1,21 @@
 package com.explosion_wands.wands;
 
-import com.explosion_wands.customFunctions.tnt.CustomTnt;
+import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.hurtingprojectile.LargeFireball;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class FireballScatterWand {
@@ -44,10 +47,13 @@ public class FireballScatterWand {
             int spawnHeight;
             spawnHeight = 17;
             float explosionPower = 0F;
-            int reach = ExplosionEntities.reach;
+            int reachEntities = ExplosionEntities.reachEntities;
+            int reachBlock = ExplosionEntities.reachBlock;
+            int inflate = ExplosionEntities.inflate;
             Vec3 playerEyeStart = player.getEyePosition();
             Vec3 playerLookAngle = player.getLookAngle();
-            Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reach));
+            Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
+            LargeFireball fireball = new LargeFireball(level, player, playerLookAngle, fireballExplosionPower);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -55,12 +61,27 @@ public class FireballScatterWand {
                     ClipContext.Fluid.NONE,
                     player
             ));
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                    level,
+                    fireball,
+                    playerEyeStart,
+                    playerEyeEnd,
+                    player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
+                    //Makes it so that we can hit any type of entity
+                    entity -> entity instanceof Entity
+                    //Ensures that we can't hit the hitbox of dead entities
+                    && entity.isAlive()
+                    && !entity.isRemoved()
+                    && entity != player);
             BlockPos target = blockHitResult.getBlockPos();
+            if(entityHitResult != null) {
+                target = entityHitResult.getEntity().blockPosition();
+            }
             //Failsafe in-case we spawn more entities than is intended
             if(spawnedEntities <= maxEntities) {
                 for (double theta = ExplosionEntities.theta; theta <= lessThanTheta; theta += incrementTheta) {
                     for (double phi = ExplosionEntities.phi; phi <= lessThanPhi; phi += incrementPhi) {
-                        LargeFireball fireball = new LargeFireball(level, player, playerLookAngle, fireballExplosionPower);
+                        fireball = new LargeFireball(level, player, playerLookAngle, fireballExplosionPower);
                         CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
                         //This does not make a perfect circle, but it should not be noticeable
                         if (increment <= randomExplosion && customTnt != null) {
@@ -78,7 +99,6 @@ public class FireballScatterWand {
                             fireball.setPos(target.getX() + x,
                                     target.getY() - y + spawnHeight,
                                     target.getZ() - z
-
                             );
                             fireball.addTag("fireball");
                             serverLevel.addFreshEntity(fireball);

@@ -1,17 +1,20 @@
 package com.explosion_wands.wands;
 
-import com.explosion_wands.customFunctions.tnt.CustomTnt;
+import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class TNTFallingWand {
@@ -21,7 +24,7 @@ public class TNTFallingWand {
             int maxEntities = ExplosionEntities.maxEntities;
             int fuse = ExplosionEntities.fuse;
             int spawnedEntities = ExplosionEntities.spawnedEntities;
-            float minExplosion = 0.2F;
+            float minExplosion = 1F;
             float maxExplosion = 2F;
             int secondFuse = 200;
             boolean explodeOnContact = true;
@@ -41,10 +44,25 @@ public class TNTFallingWand {
             double z = ExplosionEntities.z;
             double r = 1.5;
             int spawnHeight = ExplosionEntities.spawnHeight;
-            int reach = ExplosionEntities.reach;
+            int reachEntities = ExplosionEntities.reachEntities;
+            int reachBlock = ExplosionEntities.reachBlock;
+            int inflate = ExplosionEntities.inflate;
             Vec3 playerEyeStart = player.getEyePosition();
             Vec3 playerLookAngle = player.getLookAngle();
-            Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reach));
+            Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
+            CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
+            assert customTnt != null;
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                    level,
+                    customTnt,
+                    playerEyeStart,
+                    playerEyeEnd,
+                    player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
+                    entity -> entity instanceof Entity
+                    && entity.isAlive()
+                    && !entity.isRemoved()
+                    && entity != player,
+                    0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -53,12 +71,15 @@ public class TNTFallingWand {
                     player
             ));
             BlockPos target = blockHitResult.getBlockPos();
+            if(entityHitResult != null) {
+                target = entityHitResult.getEntity().blockPosition();
+            }
             //Failsafe in-case we spawn more entities than is intended
             if(spawnedEntities <= maxEntities) {
                 for (double theta = ExplosionEntities.theta; theta <= lessThanTheta; theta += incrementTheta) {
                     for (double phi = ExplosionEntities.phi; phi <= lessThanPhi; phi += incrementPhi) {
                         //Adds the entities to the world
-                        CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
+                        customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
                         CustomTnt customTnt2 = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
                         //This does not make a perfect circle, but it should not be noticeable
                             if (increment <= randomExplosion && customTnt != null) {
@@ -76,7 +97,6 @@ public class TNTFallingWand {
                                         target.getY() + y + spawnHeight,
                                         target.getZ() + z
                                 );
-
                                 customTnt2.setFuse(secondFuse);
                                 customTnt2.setExplodeOnContact(explodeOnContact);
                                 customTnt2.setExplosionPower(explosionPower);
@@ -99,7 +119,7 @@ public class TNTFallingWand {
                                 + ",   random explosion:   " + randomExplosion
                                 + ",   random increment:   " + 1
                 );
-                 */
+                */
             }
             return InteractionResult.SUCCESS;
         } else {
