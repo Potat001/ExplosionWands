@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class FireballWandItem extends Item {
     public FireballWandItem(Properties properties) {
@@ -15,7 +15,7 @@ public class FireballWandItem extends Item {
     }
 
     @Override
-    public @NonNull InteractionResult use(Level level, @NonNull Player player, @NonNull InteractionHand hand) {
+    public @NotNull InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide()) {
             Projectile projectile = FireballWand.asFireballProjectile(level, player);
             level.addFreshEntity(projectile);

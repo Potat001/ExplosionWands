@@ -6,7 +6,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class TNTExplodingBlocksWandItem extends Item {
     public TNTExplodingBlocksWandItem(Properties properties) {
@@ -14,7 +14,7 @@ public class TNTExplodingBlocksWandItem extends Item {
     }
 
     @Override
-    public @NonNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand hand) {
+    public @NotNull InteractionResult use(Level level, Player player, InteractionHand hand) {
         return TNTExplodingBlocksWand.use(level, player);
     }
 }

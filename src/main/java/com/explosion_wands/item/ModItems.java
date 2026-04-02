@@ -5,8 +5,8 @@ import com.explosion_wands.initialization.ModInitialization;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 public class ModItems {
@@ -160,7 +160,7 @@ public class ModItems {
     private static ResourceKey<Item> key(String name) {
         return ResourceKey.create(
                 Registries.ITEM,
-                Identifier.fromNamespaceAndPath(ModInitialization.MOD_ID, name));
+                ResourceLocation.fromNamespaceAndPath(ModInitialization.MOD_ID, name));
     }
 
     //Registering the item

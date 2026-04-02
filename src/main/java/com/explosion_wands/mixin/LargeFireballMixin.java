@@ -1,6 +1,6 @@
 package com.explosion_wands.mixin;
 
-import net.minecraft.world.entity.projectile.hurtingprojectile.LargeFireball;
+import net.minecraft.world.entity.projectile.LargeFireball;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(LargeFireball.class)

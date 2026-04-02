@@ -7,7 +7,7 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class TNTChickenWandItem extends Item {
     public TNTChickenWandItem(Item.Properties properties) {
@@ -15,7 +15,7 @@ public class TNTChickenWandItem extends Item {
     }
 
     @Override
-    public @NonNull InteractionResult use(Level level, @NonNull Player player, @NonNull InteractionHand hand) {
+    public @NotNull InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide()) {
             PrimedTnt customTnt = TNTChickenWand.asPrimedTnt(level, player);
             if (customTnt != null) {
