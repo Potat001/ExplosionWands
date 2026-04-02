@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "explosion_wands",
+	"id": "explosion-wands",
 	"version": "${version}",
 	"name": "Explosion Wands",
 	"description": "A fun mod that adds a variety of explosion wands to the game. Use at your own discretion!",
@@ -8,8 +8,8 @@
 		"Potat"
 	],
 	"contact": {
-		"homepage": "https://modrinth.com/mod/explosion-wands",
-		"sources": "https://github.com/Potat001/explosion_wands-1.21.11"
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
 	"icon": "icon.png",
@@ -26,12 +26,9 @@
 		"explosion_wands.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.18.4",
-		"minecraft": "~1.21.11",
-		"java": ">=21",
+		"fabricloader": ">=0.18.5",
+		"minecraft": "~26.1",
+		"java": ">=25",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
