@@ -1,7 +1,6 @@
 Hi, welcome to my mod, Explosion Wands, which includes 13 explosion wands for explosive fun!
 
-This mod only works on Minecraft Java version 1.21.11, and you'll need
-the Fabric Loader and Fabric API to get the mod working.
+You'll need the Fabric Loader and Fabric API to get the mod working.
 I would also recommend installing Sodium to get that
 extra bit of FPS, which you probably want with a mod like this.
 
