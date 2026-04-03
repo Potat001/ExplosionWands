@@ -93,7 +93,8 @@ public class TNTExplodingEntitiesWand {
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 4) && randomEntity > (spawnedEntities / 8)) {
-                            entityToSpawn = EntityType.BREEZE;
+                            //Breezes don't seem to be an enemy in the version, so replaces them with Blazes instead
+                            entityToSpawn = EntityType.BLAZE;
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 8) * 2 + (spawnedEntities / 8) && randomEntity > (spawnedEntities / 4)) {
@@ -105,7 +106,8 @@ public class TNTExplodingEntitiesWand {
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 2) + (spawnedEntities / 8) && randomEntity > (spawnedEntities / 2)) {
-                            entityToSpawn = EntityType.ARMADILLO;
+                            //Armadillos aren't in this version, so we replace them with bees instead
+                            entityToSpawn = EntityType.BEE;
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 2) + (spawnedEntities / 4) && randomEntity > (spawnedEntities / 2) + (spawnedEntities / 8)) {
@@ -157,15 +159,13 @@ public class TNTExplodingEntitiesWand {
                                 + ",   random explosion:   " + randomExplosion
                                 + ",   random increment:   " + randomIncrement
                 );
-                 */
+                */
                 /*
                 System.out.println(
                         ",   random entity number:    " + randomEntity
                                 + ",   entity type: " + entityType
                 );
                  */
-                //Plays a sound when a block is clicked
-
             }
         }
         return InteractionResultHolder.success(itemStack);

@@ -264,7 +264,6 @@ public class CustomTnt extends PrimedTnt {
     }
 
     //How strong the gravity of the primed TNT is
-    @Override
     protected double getDefaultGravity() {
         return defaultGravity;
     }
