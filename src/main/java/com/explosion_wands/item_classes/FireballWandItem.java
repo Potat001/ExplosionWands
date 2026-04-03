@@ -7,10 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
 public class FireballWandItem extends Item {
@@ -20,9 +17,8 @@ public class FireballWandItem extends Item {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         ItemStack itemStack = player.getItemInHand(hand);
-        if (hitResult.getType() != HitResult.Type.BLOCK && !level.isClientSide()) {
+        if (!level.isClientSide()) {
             Projectile projectile = FireballWand.asFireballProjectile(level, player);
             level.addFreshEntity(projectile);
         }
