@@ -93,7 +93,8 @@ public class TNTExplodingEntitiesWand {
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 4) && randomEntity > (spawnedEntities / 8)) {
-                            entityToSpawn = EntityType.BREEZE;
+                            //Breezes don't seem to be an enemy in the version, so replaces them with Blazes instead
+                            entityToSpawn = EntityType.BLAZE;
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 8) * 2 + (spawnedEntities / 8) && randomEntity > (spawnedEntities / 4)) {
