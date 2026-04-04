@@ -141,9 +141,7 @@ public class TNTSlowBarrageWand {
 						}
 					});
                 }
-			return InteractionResult.SUCCESS;
-		} else {
-			return InteractionResult.CONSUME;
 		}
+		return InteractionResult.SUCCESS;
 	}
 }

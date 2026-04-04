@@ -21,6 +21,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class TNTExplodingBlocksWand {
+
     public static InteractionResult use(Level level, Player player)  {
         if (level instanceof ServerLevel serverLevel && player != null) {
             int maxEntities = ExplosionEntities.maxEntities;
@@ -175,9 +176,7 @@ public class TNTExplodingBlocksWand {
                             + ",   entity type: " + blockType
             );
              */
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }

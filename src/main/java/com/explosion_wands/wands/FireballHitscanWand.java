@@ -6,8 +6,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,15 +23,6 @@ import net.minecraft.world.phys.Vec3;
 public class FireballHitscanWand extends Item {
     public FireballHitscanWand(Properties properties) {
         super(properties);
-    }
-
-    public static InteractionResult use(Item item, Level level, Player player, InteractionHand hand) {
-        BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        if (hitResult.getType() != HitResult.Type.BLOCK && !level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
-        }
     }
 
     public static Projectile asFireballProjectile(Level level, Player player) {
@@ -113,6 +102,7 @@ public class FireballHitscanWand extends Item {
                             || (blockDistance >= entityDistance && blockHitResultEntities.getType() == HitResult.Type.MISS && blockDistance <= reachEntities)) {
                         //Changes the fireball's position to the position of the entity we clicked on
                         Vec3 fireballOnEntityPosition = targetEntity.position();
+                        //Teleports the fireball into the entity
                         fireballAir.moveTo(fireballOnEntityPosition);
                         //Filters out entities by if they're living (mobs) or non-living, like
                         //falling blocks and boats
