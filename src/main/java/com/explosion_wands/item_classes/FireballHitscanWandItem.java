@@ -22,6 +22,6 @@ public class FireballHitscanWandItem extends Item {
                 level.addFreshEntity(projectile);
             }
         }
-        return FireballHitscanWand.use(this, level, player, hand);
+        return InteractionResult.SUCCESS;
     }
 }

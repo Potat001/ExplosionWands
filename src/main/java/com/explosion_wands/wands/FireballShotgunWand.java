@@ -20,15 +20,6 @@ public class FireballShotgunWand extends Item {
         super(properties);
     }
 
-    public static InteractionResult use(Item item, Level level, Player player, InteractionHand hand) {
-        BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        if (hitResult.getType() != HitResult.Type.BLOCK && !level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
-        }
-    }
-
     public static Projectile asFireballProjectile(Level level, Player player) {
         if(level instanceof ServerLevel server) {
             BlockHitResult blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
@@ -37,7 +28,6 @@ public class FireballShotgunWand extends Item {
             double incremented = 2;
             double changePos = 0;
             double fireballAmount = 50;
-            //Clicks on air/liquid
             int explosionPowerAir = 9;
             //fireball's velocity
             double velocity = 3;

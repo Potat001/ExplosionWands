@@ -114,9 +114,7 @@ public class FireballScatterWand {
                     }
                 }
             }
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }

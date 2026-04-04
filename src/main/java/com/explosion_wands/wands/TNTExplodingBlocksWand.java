@@ -175,9 +175,7 @@ public class TNTExplodingBlocksWand {
                             + ",   entity type: " + blockType
             );
              */
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }

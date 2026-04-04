@@ -23,15 +23,6 @@ public class TNTTornadoWand extends Item {
         super(properties);
     }
 
-    public static InteractionResult use(Item item, Level level, Player player, InteractionHand hand) {
-        BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        if (hitResult.getType() != HitResult.Type.BLOCK && !level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
-        }
-    }
-
     public static PrimedTnt asPrimedTnt(Level level, Player player) {
         float volume = 0.4F;
         float pitch = 1.0F;

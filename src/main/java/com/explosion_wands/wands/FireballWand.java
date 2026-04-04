@@ -19,20 +19,10 @@ public class FireballWand extends Item {
         super(properties);
     }
 
-    public static InteractionResult use(Item item, Level level, Player player, InteractionHand hand) {
-        BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        if (hitResult.getType() != HitResult.Type.BLOCK && !level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
-        }
-    }
-
     public static Projectile asFireballProjectile(Level level, Player player) {
         float volume = 0.4F;
         float pitch = 1.0F;
         BlockHitResult blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        //Clicks on air/liquid
         int explosionPowerAir = 40;
         //fireball's velocity
         int velocity = 10;

@@ -22,6 +22,6 @@ public class TNTDrillWandItem extends Item {
                 level.addFreshEntity(customTnt);
             }
         }
-        return TNTDrillWand.use(this, level, player, hand);
+        return InteractionResult.SUCCESS;
     }
 }

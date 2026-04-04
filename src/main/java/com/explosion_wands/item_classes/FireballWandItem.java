@@ -20,6 +20,6 @@ public class FireballWandItem extends Item {
             Projectile projectile = FireballWand.asFireballProjectile(level, player);
             level.addFreshEntity(projectile);
         }
-        return FireballWand.use(this, level, player, hand);
+        return InteractionResult.SUCCESS;
     }
 }

@@ -22,6 +22,6 @@ public class TNTChickenWandItem extends Item {
                 level.addFreshEntity(customTnt);
             }
         }
-        return TNTChickenWand.use(this, level, player, hand);
+        return InteractionResult.SUCCESS;
     }
 }

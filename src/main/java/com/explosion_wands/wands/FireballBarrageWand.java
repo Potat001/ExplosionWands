@@ -101,8 +101,7 @@ public class FireballBarrageWand {
                         SoundSource.PLAYERS,
                         volume,
                         pitch);
-            return InteractionResult.SUCCESS;
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.SUCCESS;
     }
 }
