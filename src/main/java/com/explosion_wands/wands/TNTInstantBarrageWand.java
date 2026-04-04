@@ -98,9 +98,7 @@ public class TNTInstantBarrageWand {
                     SoundSource.PLAYERS,
                     volume,
                     pitch);
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }
