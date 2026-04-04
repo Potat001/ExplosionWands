@@ -41,7 +41,10 @@ public class TNTSlowBarrageWand {
 			int reachEntities = 128;
 			int reachBlocks = 512;
 			int inflate = 100;
-			final double[] spawnHeight = {30};
+			//Since setDefaultGravity is bugged in this version and below,
+			//we change the spawn height so most of them explode the blocks under them
+			//(if they're falling roughly on the same height as the block we clicked on)
+			final double[] spawnHeight = {20};
 			final double[] spawnHeightSound = {5};
 			double min = 1.0;
 			double max = 4.0;
