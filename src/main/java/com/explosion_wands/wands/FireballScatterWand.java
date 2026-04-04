@@ -69,16 +69,16 @@ public class FireballScatterWand {
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     //Makes it so that we can hit any type of entity
                     entity -> entity instanceof Entity
-                    //Ensures that we can't hit the hitbox of dead entities
-                    && entity.isAlive()
-                    && !entity.isRemoved()
-                    && entity != player);
+                            //Ensures that we can't hit the hitbox of dead entities
+                            && entity.isAlive()
+                            && !entity.isRemoved()
+                            && entity != player);
             BlockPos target = blockHitResult.getBlockPos();
-            if(entityHitResult != null) {
+            if (entityHitResult != null) {
                 target = entityHitResult.getEntity().blockPosition();
             }
             //Failsafe in-case we spawn more entities than is intended
-            if(spawnedEntities <= maxEntities) {
+            if (spawnedEntities <= maxEntities) {
                 for (double theta = ExplosionEntities.theta; theta <= lessThanTheta; theta += incrementTheta) {
                     for (double phi = ExplosionEntities.phi; phi <= lessThanPhi; phi += incrementPhi) {
                         fireball = new LargeFireball(level, player, playerLookAngle, fireballExplosionPower);
@@ -114,9 +114,7 @@ public class FireballScatterWand {
                     }
                 }
             }
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }

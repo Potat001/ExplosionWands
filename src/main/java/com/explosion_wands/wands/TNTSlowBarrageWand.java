@@ -61,24 +61,24 @@ public class TNTSlowBarrageWand {
 			double angleStep = Math.PI / ((double) tntAmount / 2); //How smooth the curve looks
 			double amplitude = 15; //Width of the curve
 			//Making sure the primed TNTs explode when all the primed TNTs in the current loop has spawned
-			int tntFuseTimer = (tntAmount * 50) / (50 * tntAmountPerTick) ; //50 ms = 1 tick
+			int tntFuseTimer = (tntAmount * 50) / (50 * tntAmountPerTick); //50 ms = 1 tick
 			Vec3 playerEyeStart = player.getEyePosition();
 			Vec3 playerLookAngle = player.getLookAngle();
 			Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlocks));
 			//Makes a duplicate, unused CustomTnt so we're able to get entityHitResult working without
 			//potentially having to rewrite much of the code
 			CustomTnt customTnt1 = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
-            assert customTnt1 != null;
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+			assert customTnt1 != null;
+			EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
 					level,
 					customTnt1,
 					playerEyeStart,
 					playerEyeEnd,
 					player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
 					entity -> entity instanceof Entity
-					&& entity.isAlive()
-					&& !entity.isRemoved()
-					&& entity != player,
+							&& entity.isAlive()
+							&& !entity.isRemoved()
+							&& entity != player,
 					0);
 			final BlockHitResult blockHitResult = level.clip(new ClipContext(
 					playerEyeStart,
@@ -91,59 +91,57 @@ public class TNTSlowBarrageWand {
 			if(entityHitResult != null) {
 				target = entityHitResult.getEntity().blockPosition();
 			} else {
-                target = blockHitResult.getBlockPos();
-            }
-            final double[] changePosition = initialPos; //Initial position of the starting TNT
-				for (int i = 0; i < tntAmount; i++) {
-						//Fires a TNT at the interval specified in tick()
-					int finalI = i;
-					//Adds one primed TNT based on the tickCounter
-					int finalI1 = i;
-					queue.add(() -> {
-						//Creates primed TNTs every iteration
-						CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
-						if(customTnt != null) {
-							//X dir: cos, Z dir: sin, makes a circle
-                            customTnt.setPos(target.getX() + (Math.cos(angle[defaultValues]) * amplitude),
-                                    target.getY() + spawnHeight[defaultValues],
-                                    target.getZ() + (Math.sin(angle[defaultValues]) * amplitude));
-                            customTnt.setFuse(tntFuseTimer);
-							//Performance improvement: Spawns a particle effect on each TNT that satisfy the modulus criteria instead of on each TNT
-							if ((finalI % moduloParticle) == moduloRest) {
-								//Particles only spawn 32 blocks away from the player. Might bypass in future
-								serverLevel.sendParticles(ParticleTypes.COPPER_FIRE_FLAME, customTnt.getX(), customTnt.getY(), customTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
-							}
-							customTnt.setExplosionPower(explosionPower);
-							customTnt.setExplodeOnContact(explodeOnContact);
-							customTnt.setDefaultGravity(defaultGravity);
-							//Changes the initial angle by the value of angleStep every iteration so the TNTs are not frozen
-							angle[defaultValues] += angleStep;
-							//Height of the cos curve every iteration
-							changePosition[defaultValues] += Math.PI / ((double) (tntAmount / 4) / 2);
-							spawnHeight[defaultValues] -= 0.25;
-							//Adds the primed TNT to the world
-							serverLevel.addFreshEntity(customTnt);
-							if(customTnt.touchingUnloadedChunk()) {
-								customTnt.discard();
-							}
-							//Kind of a hacky way to play a sound only at the very start of the loop
-							if(finalI1 == 0) {
-                                //Makes the sound play as close to the y direction the player is at
-                                level.playSound(null,
-                                        target.getX(),
-                                        //Makes the sound play as close to the y direction the player is at
-                                        target.getY() + spawnHeightSound[defaultValues],
-                                        target.getZ(),
-                                        SoundEvents.TNT_PRIMED,
-                                        SoundSource.PLAYERS,
-                                        volume, pitch);
-                            }
+				target = blockHitResult.getBlockPos();
+			}
+			final double[] changePosition = initialPos; //Initial position of the starting TNT
+			for (int i = 0; i < tntAmount; i++) {
+				//Fires a TNT at the interval specified in tick()
+				int finalI = i;
+				//Adds one primed TNT based on the tickCounter
+				int finalI1 = i;
+				queue.add(() -> {
+					//Creates primed TNTs every iteration
+					CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
+					if(customTnt != null) {
+						//X dir: cos, Z dir: sin, makes a circle
+						customTnt.setPos(target.getX() + (Math.cos(angle[defaultValues]) * amplitude),
+								target.getY() + spawnHeight[defaultValues],
+								target.getZ() + (Math.sin(angle[defaultValues]) * amplitude));
+						customTnt.setFuse(tntFuseTimer);
+						//Performance improvement: Spawns a particle effect on each TNT that satisfy the modulus criteria instead of on each TNT
+						if ((finalI % moduloParticle) == moduloRest) {
+							//Particles only spawn 32 blocks away from the player. Might bypass in future
+							serverLevel.sendParticles(ParticleTypes.COPPER_FIRE_FLAME, customTnt.getX(), customTnt.getY(), customTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
 						}
-					});
-                }
-			return InteractionResult.SUCCESS;
-		} else {
-			return InteractionResult.CONSUME;
+						customTnt.setExplosionPower(explosionPower);
+						customTnt.setExplodeOnContact(explodeOnContact);
+						customTnt.setDefaultGravity(defaultGravity);
+						//Changes the initial angle by the value of angleStep every iteration so the TNTs are not frozen
+						angle[defaultValues] += angleStep;
+						//Height of the cos curve every iteration
+						changePosition[defaultValues] += Math.PI / ((double) (tntAmount / 4) / 2);
+						spawnHeight[defaultValues] -= 0.25;
+						//Adds the primed TNT to the world
+						serverLevel.addFreshEntity(customTnt);
+						if(customTnt.touchingUnloadedChunk()) {
+							customTnt.discard();
+						}
+						//Kind of a hacky way to play a sound only at the very start of the loop
+						if(finalI1 == 0) {
+							//Makes the sound play as close to the y direction the player is at
+							level.playSound(null,
+									target.getX(),
+									//Makes the sound play as close to the y direction the player is at
+									target.getY() + spawnHeightSound[defaultValues],
+									target.getZ(),
+									SoundEvents.TNT_PRIMED,
+									SoundSource.PLAYERS,
+									volume, pitch);
+						}
+					}
+				});
+			}
 		}
+		return InteractionResult.SUCCESS;
 	}
 }

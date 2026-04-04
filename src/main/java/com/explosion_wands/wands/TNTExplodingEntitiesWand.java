@@ -63,9 +63,9 @@ public class TNTExplodingEntitiesWand {
                     playerEyeEnd,
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     entity -> entity instanceof Entity
-                    && entity.isAlive()
-                    && !entity.isRemoved()
-                    && entity != player,
+                            && entity.isAlive()
+                            && !entity.isRemoved()
+                            && entity != player,
                     0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
@@ -79,7 +79,7 @@ public class TNTExplodingEntitiesWand {
             String entityType = "";
 
             BlockPos target = blockHitResult.getBlockPos();
-            if(entityHitResult != null) {
+            if (entityHitResult != null) {
                 target = entityHitResult.getEntity().blockPosition();
             }
             //Failsafe in-case we spawn more entities than is intended
@@ -165,9 +165,7 @@ public class TNTExplodingEntitiesWand {
                 //Plays a sound when a block is clicked
 
             }
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }

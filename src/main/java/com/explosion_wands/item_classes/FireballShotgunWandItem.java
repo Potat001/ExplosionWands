@@ -22,6 +22,6 @@ public class FireballShotgunWandItem extends Item {
                 level.addFreshEntity(projectile);
             }
         }
-        return FireballShotgunWand.use(this, level, player, hand);
+        return InteractionResult.SUCCESS;
     }
 }

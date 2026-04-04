@@ -51,9 +51,9 @@ public class TNTInstantBarrageWand {
                     playerEyeEnd,
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     entity -> entity instanceof Entity
-                    && entity.isAlive()
-                    && !entity.isRemoved()
-                    && entity != player,
+                            && entity.isAlive()
+                            && !entity.isRemoved()
+                            && entity != player,
                     0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
@@ -98,9 +98,7 @@ public class TNTInstantBarrageWand {
                     SoundSource.PLAYERS,
                     volume,
                     pitch);
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }
