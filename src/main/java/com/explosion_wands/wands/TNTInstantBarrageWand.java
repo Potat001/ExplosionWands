@@ -40,7 +40,6 @@ public class TNTInstantBarrageWand {
             int fuse = 200;
             float explosionPower = 10.0F;
             boolean explodeOnContact = true;
-            double defaultGravity = 0.04;
             Vec3 playerEyeStart = player.getEyePosition();
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlocks));
@@ -80,7 +79,6 @@ public class TNTInstantBarrageWand {
                     customTnt.setFuse(fuse);
                     customTnt.setExplosionPower(explosionPower);
                     customTnt.setExplodeOnContact(explodeOnContact);
-                    customTnt.setDefaultGravity(defaultGravity);
                     //Adds the primed TNT to the world
                     serverLevel.addFreshEntity(customTnt);
                     if (customTnt.touchingUnloadedChunk()) {

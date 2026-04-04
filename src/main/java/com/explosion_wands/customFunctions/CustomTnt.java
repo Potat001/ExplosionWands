@@ -22,7 +22,6 @@ public class CustomTnt extends PrimedTnt {
 
     //Ability to separate the values for the explosion power of TNTs for different classes
     float explosionPower = 4.0F; //Default: 4.0F
-    double defaultGravity = 0.04; //Default: 0.04
 
     //CUSTOM-MADE
 
@@ -236,7 +235,6 @@ public class CustomTnt extends PrimedTnt {
             }
             explosionAmount++;
             if (exploded) {
-                setDefaultGravity(0.30);
                 lastExplosionTick = (int) level().getGameTime();
             }
             //Failsafe if the time between the primedTNT explosions is less than or equal to 1, which prevents the primedTNT
@@ -261,15 +259,6 @@ public class CustomTnt extends PrimedTnt {
 
     public void setExplosionPower(float power) {
         this.explosionPower = power;
-    }
-
-    //How strong the gravity of the primed TNT is
-    protected double getDefaultGravity() {
-        return defaultGravity;
-    }
-
-    public void setDefaultGravity(double gravity) {
-        this.defaultGravity = gravity;
     }
 
     //Makes the TNT explode on contact

@@ -120,7 +120,6 @@ public class TNTSlowBarrageWand {
 							}
 							customTnt.setExplosionPower(explosionPower);
 							customTnt.setExplodeOnContact(explodeOnContact);
-							customTnt.setDefaultGravity(defaultGravity);
 							//Changes the initial angle by the value of angleStep every iteration so the TNTs are not frozen
 							angle[defaultValues] += angleStep;
 							//Height of the cos curve every iteration
