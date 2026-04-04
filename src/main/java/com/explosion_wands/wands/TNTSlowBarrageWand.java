@@ -41,7 +41,7 @@ public class TNTSlowBarrageWand {
 			int reachEntities = 128;
 			int reachBlocks = 512;
 			int inflate = 100;
-			final double[] spawnHeight = {30};
+			final double[] spawnHeight = {20};
 			final double[] spawnHeightSound = {5};
 			double min = 1.0;
 			double max = 4.0;
