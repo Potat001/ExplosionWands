@@ -62,10 +62,10 @@ public class FireballBarrageWand {
                     player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
                     //Makes it so that we can hit any type of entity
                     entity -> entity instanceof Entity
-                    //Ensures that we can't hit the hitbox of dead entities
-                    && entity.isAlive()
-                    && !entity.isRemoved()
-                    && entity != player);
+                            //Ensures that we can't hit the hitbox of dead entities
+                            && entity.isAlive()
+                            && !entity.isRemoved()
+                            && entity != player);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -93,16 +93,15 @@ public class FireballBarrageWand {
                 serverLevel.addFreshEntity(largeFireball);
                 angle += angleStep;
             }
-                serverLevel.playSound(null,
-                        target.getX(),
-                        target.getY() + spawnHeightSound,
-                        target.getZ(),
-                        SoundEvents.FIRECHARGE_USE,
-                        SoundSource.PLAYERS,
-                        volume,
-                        pitch);
-            return InteractionResult.SUCCESS;
+            serverLevel.playSound(null,
+                    target.getX(),
+                    target.getY() + spawnHeightSound,
+                    target.getZ(),
+                    SoundEvents.FIRECHARGE_USE,
+                    SoundSource.PLAYERS,
+                    volume,
+                    pitch);
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.SUCCESS;
     }
 }

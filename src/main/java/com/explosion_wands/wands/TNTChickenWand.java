@@ -4,8 +4,6 @@ import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -20,15 +18,6 @@ import net.minecraft.world.phys.Vec3;
 public class TNTChickenWand extends Item {
     public TNTChickenWand(Item.Properties properties) {
         super(properties);
-    }
-
-    public static InteractionResult use(Item item, Level level, Player player, InteractionHand hand) {
-        BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        if (hitResult.getType() != HitResult.Type.BLOCK && !level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
-        }
     }
 
     public static PrimedTnt asPrimedTnt(Level level, Player player) {
@@ -67,25 +56,25 @@ public class TNTChickenWand extends Item {
                 Vec3 customTntInAirPosition = blockHitResult.getLocation();
                 customTnt.moveOrInterpolateTo(customTntInAirPosition);
             }
-                customTnt.setDeltaMovement(playerLookDir.scale(velocity));
+            customTnt.setDeltaMovement(playerLookDir.scale(velocity));
 
-                customTnt.setDiscardOnFirstUse(discardFirstUse);
-                customTnt.setExplodeOnContact(explodeOnContact);
-                customTnt.setExplosionPower(explosionPower);
-                customTnt.setEntitySpawnAfterExplosion(entitySpawnAfterExplosion);
-                customTnt.setCircle(circle);
-                customTnt.setAmplitude(amplitude);
-                customTnt.setYChange(yChange);
-                customTnt.setEntityToSpawn(entityToSpawn);
-                customTnt.setEntityAmount(entityAmount);
-                customTnt.setGradualEntitySpawnAfterExplosion(gradualSpawnAfterExplosion);
-                if(customTnt.touchingUnloadedChunk()) {
-                    customTnt.discard();
-                }
-                level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
-                return customTnt;
+            customTnt.setDiscardOnFirstUse(discardFirstUse);
+            customTnt.setExplodeOnContact(explodeOnContact);
+            customTnt.setExplosionPower(explosionPower);
+            customTnt.setEntitySpawnAfterExplosion(entitySpawnAfterExplosion);
+            customTnt.setCircle(circle);
+            customTnt.setAmplitude(amplitude);
+            customTnt.setYChange(yChange);
+            customTnt.setEntityToSpawn(entityToSpawn);
+            customTnt.setEntityAmount(entityAmount);
+            customTnt.setGradualEntitySpawnAfterExplosion(gradualSpawnAfterExplosion);
+            if(customTnt.touchingUnloadedChunk()) {
+                customTnt.discard();
             }
-            return null;
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
+            return customTnt;
+        }
+        return null;
     }
 }

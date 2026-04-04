@@ -6,8 +6,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,15 +23,6 @@ import net.minecraft.world.phys.Vec3;
 public class FireballHitscanWand extends Item {
     public FireballHitscanWand(Properties properties) {
         super(properties);
-    }
-
-    public static InteractionResult use(Item item, Level level, Player player, InteractionHand hand) {
-        BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        if (hitResult.getType() != HitResult.Type.BLOCK && !level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
-        }
     }
 
     public static Projectile asFireballProjectile(Level level, Player player) {
@@ -84,10 +73,10 @@ public class FireballHitscanWand extends Item {
                 player.getBoundingBox().expandTowards(playerLookDir.scale(reachEntities)).inflate(inflate),
                 //Makes it so that we can hit any type of entity
                 entity -> entity instanceof Entity
-                //Ensures that we can't hit the hitbox of dead entities
-                && entity.isAlive()
-                && !entity.isRemoved()
-                && entity != player);
+                        //Ensures that we can't hit the hitbox of dead entities
+                        && entity.isAlive()
+                        && !entity.isRemoved()
+                        && entity != player);
         BlockHitResult blockHitResultEntities = level.clip(new ClipContext(
                 playerStartDir,
                 playerEndDirEntities,
@@ -102,60 +91,60 @@ public class FireballHitscanWand extends Item {
                 ClipContext.Fluid.NONE,
                 player
         ));
-            double blockDistance = blockHitResultEntities.getLocation().distanceTo(playerStartDir);
-            if(entityHitResult != null) {
+        double blockDistance = blockHitResultEntities.getLocation().distanceTo(playerStartDir);
+        if(entityHitResult != null) {
             double entityDistance = entityHitResult.getLocation().distanceTo(playerStartDir);
-                Entity targetEntity = entityHitResult.getEntity();
-                    //Ensures that we cannot hit entities through blocks
-                    //Also hopeful performance improvements by ensuring that the block distance is less than or equal to the player's reach
-                    //...also hopefully no intended consequences of this...
-                    if ((blockDistance >= entityDistance && blockHitResultEntities.getType() == HitResult.Type.BLOCK && blockDistance <= reachEntities)
-                            || (blockDistance >= entityDistance && blockHitResultEntities.getType() == HitResult.Type.MISS && blockDistance <= reachEntities)) {
-                        //Changes the fireball's position to the position of the entity we clicked on
-                        Vec3 fireballOnEntityPosition = targetEntity.position();
-                        //Teleports the fireball into the entity
-                        fireballAir.moveOrInterpolateTo(fireballOnEntityPosition);
-                        //Filters out entities by if they're living (mobs) or non-living, like
-                        //falling blocks and boats
-                        if(entityHitResult.getEntity() instanceof LivingEntity) {
-                            //Evil fake fireball explosion
-                            level.explode(fireballAir, fireballAir.getX(), fireballAir.getY(), fireballAir.getZ(),
-                                    explosionPowerEntity, Level.ExplosionInteraction.MOB);
-                            level.playSound(null, dirX, dirY, dirZ, SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, volume, pitch);
-                        } else {
-                            //Evil fake fireball explosion
-                            level.explode(fireballAir, fireballAir.getX(), fireballAir.getY(), fireballAir.getZ(),
-                                   explosionPowerOther, Level.ExplosionInteraction.MOB);
-                        }
-                        if (level instanceof ServerLevel serverLevel) {
-                            //Particles spawn up to 32 blocks away from the player
-                            //32-bit integer limit: 2147483647
-                            serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
-                            serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
-                            serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);
-                            //Guarantees that we kill the entity that we clicked on
-                            entityHitResult.getEntity().kill(serverLevel);
-                        }
-                        //Fireball is fake now, discards it when spawned so it doesn't appear after exploding
-                        //This also causes the player to not get the return to sender achievement as a side effect
-                        fireballAir.discard();
-                        fireballAir.addTag("fireball");
+            Entity targetEntity = entityHitResult.getEntity();
+            //Ensures that we cannot hit entities through blocks
+            //Also hopeful performance improvements by ensuring that the block distance is less than or equal to the player's reach
+            //...also hopefully no intended consequences of this...
+            if ((blockDistance >= entityDistance && blockHitResultEntities.getType() == HitResult.Type.BLOCK && blockDistance <= reachEntities)
+                    || (blockDistance >= entityDistance && blockHitResultEntities.getType() == HitResult.Type.MISS && blockDistance <= reachEntities)) {
+                //Changes the fireball's position to the position of the entity we clicked on
+                Vec3 fireballOnEntityPosition = targetEntity.position();
+                //Teleports the fireball into the entity
+                fireballAir.moveOrInterpolateTo(fireballOnEntityPosition);
+                //Filters out entities by if they're living (mobs) or non-living, like
+                //falling blocks and boats
+                if(entityHitResult.getEntity() instanceof LivingEntity) {
+                    //Evil fake fireball explosion
+                    level.explode(fireballAir, fireballAir.getX(), fireballAir.getY(), fireballAir.getZ(),
+                            explosionPowerEntity, Level.ExplosionInteraction.MOB);
+                    level.playSound(null, dirX, dirY, dirZ, SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, volume, pitch);
+                } else {
+                    //Evil fake fireball explosion
+                    level.explode(fireballAir, fireballAir.getX(), fireballAir.getY(), fireballAir.getZ(),
+                            explosionPowerOther, Level.ExplosionInteraction.MOB);
+                }
+                if (level instanceof ServerLevel serverLevel) {
+                    //Particles spawn up to 32 blocks away from the player
+                    //32-bit integer limit: 2147483647
+                    serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
+                    serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
+                    serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);
+                    //Guarantees that we kill the entity that we clicked on
+                    entityHitResult.getEntity().kill(serverLevel);
+                }
+                //Fireball is fake now, discards it when spawned so it doesn't appear after exploding
+                //This also causes the player to not get the return to sender achievement as a side effect
+                fireballAir.discard();
+                fireballAir.addTag("fireball");
 
-                        if(fireballAir.touchingUnloadedChunk()) {
-                            fireballAir.discard();
-                        }
-                        //Since fireball gets removed before it's spawned into the world, we can just return null
-                        return null;
-                    }
+                if(fireballAir.touchingUnloadedChunk()) {
+                    fireballAir.discard();
                 }
-                BlockPos targetBlocks = blockHitResultBlocks.getBlockPos();
-                if(level instanceof ServerLevel serverLevel) {
-                    serverLevel.explode(fireballAir, targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(),
+                //Since fireball gets removed before it's spawned into the world, we can just return null
+                return null;
+            }
+        }
+        BlockPos targetBlocks = blockHitResultBlocks.getBlockPos();
+        if(level instanceof ServerLevel serverLevel) {
+            serverLevel.explode(fireballAir, targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(),
                     explosionPowerOther, Level.ExplosionInteraction.MOB);
-                    serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
-                    serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
-                    serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);
-                }
+            serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
+            serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
+            serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);
+        }
         return null;
     }
 }

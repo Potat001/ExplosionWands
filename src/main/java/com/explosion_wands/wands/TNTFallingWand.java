@@ -59,9 +59,9 @@ public class TNTFallingWand {
                     playerEyeEnd,
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     entity -> entity instanceof Entity
-                    && entity.isAlive()
-                    && !entity.isRemoved()
-                    && entity != player,
+                            && entity.isAlive()
+                            && !entity.isRemoved()
+                            && entity != player,
                     0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
@@ -82,15 +82,15 @@ public class TNTFallingWand {
                         customTnt = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
                         CustomTnt customTnt2 = ModEntities.CUSTOM_TNT.create(level, EntitySpawnReason.TRIGGERED);
                         //This does not make a perfect circle, but it should not be noticeable
-                            if (increment <= randomExplosion && customTnt != null) {
-                                customTnt.setPos(target.getX(),
-                                        target.getY() + spawnHeight,
-                                        target.getZ()
-                                );
-                                customTnt.setFuse(fuse);
-                                customTnt.setExplosionPower(randomIncrement);
-                                serverLevel.addFreshEntity(customTnt);
-                            }
+                        if (increment <= randomExplosion && customTnt != null) {
+                            customTnt.setPos(target.getX(),
+                                    target.getY() + spawnHeight,
+                                    target.getZ()
+                            );
+                            customTnt.setFuse(fuse);
+                            customTnt.setExplosionPower(randomIncrement);
+                            serverLevel.addFreshEntity(customTnt);
+                        }
                         if (customTnt2 != null) {
                             if (x != 0 && y != 0 && z != 0) {
                                 customTnt2.setPos(target.getX() + x,
@@ -121,9 +121,7 @@ public class TNTFallingWand {
                 );
                 */
             }
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }

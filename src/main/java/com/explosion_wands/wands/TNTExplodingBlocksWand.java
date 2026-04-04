@@ -66,9 +66,9 @@ public class TNTExplodingBlocksWand {
                     playerEyeEnd,
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     entity -> entity instanceof Entity
-                    && entity.isAlive()
-                    && !entity.isRemoved()
-                    && entity != player,
+                            && entity.isAlive()
+                            && !entity.isRemoved()
+                            && entity != player,
                     0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
@@ -175,9 +175,7 @@ public class TNTExplodingBlocksWand {
                             + ",   entity type: " + blockType
             );
              */
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }
