@@ -165,9 +165,7 @@ public class TNTExplodingEntitiesWand {
                 //Plays a sound when a block is clicked
 
             }
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }

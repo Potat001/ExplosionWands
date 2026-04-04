@@ -22,6 +22,6 @@ public class TNTTornadoWandItem extends Item {
                 level.addFreshEntity(customTnt);
             }
         }
-        return TNTTornadoWand.use(this, level, player, hand);
+        return InteractionResult.SUCCESS;
     }
 }

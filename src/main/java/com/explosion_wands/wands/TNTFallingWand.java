@@ -121,9 +121,7 @@ public class TNTFallingWand {
                 );
                 */
             }
-            return InteractionResult.SUCCESS;
-        } else {
-            return InteractionResult.CONSUME;
         }
+        return InteractionResult.SUCCESS;
     }
 }
