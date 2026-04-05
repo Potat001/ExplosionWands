@@ -85,7 +85,7 @@ public class CustomTnt extends PrimedTnt {
     //If the primed TNT should explode given *these* conditions
     protected boolean shouldExplode() {
 
-        return ((getFuse() <= 0 && !level().isClientSide())
+        return ((getFuse() <= 0 && !level.isClientSide())
                 || ((this.horizontalCollision || this.verticalCollision)
                 || hitEntity()
                 && explodeOnContact));
@@ -116,8 +116,8 @@ public class CustomTnt extends PrimedTnt {
 
     //Responsible for exploding the TNT at its current position
     protected void explode() {
-        if(level() instanceof ServerLevel serverLevel && !entitySpawnAfterExplosion) {
-            level().explode(
+        if(level instanceof ServerLevel serverLevel && !entitySpawnAfterExplosion) {
+            level.explode(
                     this,
                     getX(),
                     getY(),
@@ -158,7 +158,7 @@ public class CustomTnt extends PrimedTnt {
         final double[] changeY = {getYChange()};
         final double[] incrementY = {getYIncrement()};
         final double[] changeZ = {getZChange()};
-        if(entityToSpawn != null && level() instanceof ServerLevel server && entitySpawnAfterExplosion) {
+        if(entityToSpawn != null && level instanceof ServerLevel server && entitySpawnAfterExplosion) {
             for (int i = 0; i < entityAmount; i++) {
                 Entity entity = entityToSpawn.create(server);
                 int finalI = i;
@@ -224,8 +224,8 @@ public class CustomTnt extends PrimedTnt {
     }
 
     protected void discardOnFirstUse() {
-        if (level() instanceof ServerLevel serverLevel) {
-            int currentTick = (int) level().getGameTime();
+        if (level instanceof ServerLevel serverLevel) {
+            int currentTick = (int) level.getGameTime();
             int ticksSinceLastExplosion;
             //Checks the time between the primedTNT explosions
             if (lastExplosionTick == -1 && explosionAmount == 0) {
@@ -235,7 +235,7 @@ public class CustomTnt extends PrimedTnt {
             }
             explosionAmount++;
             if (exploded) {
-                lastExplosionTick = (int) level().getGameTime();
+                lastExplosionTick = (int) level.getGameTime();
             }
             //Failsafe if the time between the primedTNT explosions is less than or equal to 1, which prevents the primedTNT
             //from continuously exploding in one spot, aka when its effective explosion power is less than the block it's standing on

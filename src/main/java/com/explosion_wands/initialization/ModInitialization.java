@@ -12,8 +12,8 @@ import net.minecraft.world.item.CreativeModeTabs;
 
 public class ModInitialization implements ModInitializer {
     public static final String MOD_ID = "explosion_wands";
-    public static ResourceKey<CreativeModeTab> creativeModeTabs1 = CreativeModeTabs.TOOLS_AND_UTILITIES;
-    public static ResourceKey<CreativeModeTab> creativeModeTabs2 = CreativeModeTabs.COMBAT;
+    public static CreativeModeTab creativeModeTabs1 = CreativeModeTabs.TOOLS_AND_UTILITIES;
+    public static CreativeModeTab creativeModeTabs2 = CreativeModeTabs.COMBAT;
     public void onInitialize() {
 
         //FIREBALL BARRAGE WAND
