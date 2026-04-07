@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -123,7 +124,7 @@ public class CustomTnt extends PrimedTnt {
                     getY(),
                     getZ(),
                     explosionPower,
-                    Level.ExplosionInteraction.TNT
+                    Explosion.BlockInteraction.DESTROY
             );
             if(entityToSpawn == null) {
                 serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(), getY(), getZ(), 700, 3, 3, 3, 0.2);

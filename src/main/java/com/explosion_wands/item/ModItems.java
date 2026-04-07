@@ -3,11 +3,11 @@ package com.explosion_wands.item;
 import com.explosion_wands.item_classes.*;
 import com.explosion_wands.initialization.ModInitialization;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.util.*;
+import org.intellij.lang.annotations.Identifier;
 
 public class ModItems {
     public static int stackSize = 1;
@@ -146,13 +146,17 @@ public class ModItems {
     //Creating the item's identity
     private static ResourceKey<Item> key(String name) {
         return ResourceKey.create(
-                Registries.ITEM,
+                Registry.ITEM_REGISTRY,
                 ResourceLocation.tryBuild(ModInitialization.MOD_ID, name));
     }
 
     //Registering the item
-    private static Item register(ResourceKey<Item> key, Item item) {
+    private static Item register2(ResourceKey<Item> key, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, key, item);
+    }
+
+    private static Item register(String name, Item item) {
+        return Registry.register(Registry.ITEM_REGISTRY, new Identifier(ModInitialization.MOD_ID, name), item);
     }
 
     //Initializes the items

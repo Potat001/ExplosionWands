@@ -14,12 +14,13 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
+import com.mojang.math.Vector3f;
 
 public class FireballHitscanWand extends Item {
     public FireballHitscanWand(Properties properties) {
@@ -112,12 +113,12 @@ public class FireballHitscanWand extends Item {
                         if(entityHitResult.getEntity() instanceof LivingEntity) {
                             //Evil fake fireball explosion
                             level.explode(fireballAir, fireballAir.getX(), fireballAir.getY(), fireballAir.getZ(),
-                                    explosionPowerEntity, Level.ExplosionInteraction.MOB);
+                                    explosionPowerEntity, Explosion.BlockInteraction.DESTROY);
                             level.playSound(null, dirX, dirY, dirZ, SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, volume, pitch);
                         } else {
                             //Evil fake fireball explosion
                             level.explode(fireballAir, fireballAir.getX(), fireballAir.getY(), fireballAir.getZ(),
-                                   explosionPowerOther, Level.ExplosionInteraction.MOB);
+                                   explosionPowerOther, Explosion.BlockInteraction.DESTROY);
                         }
                         if (level instanceof ServerLevel serverLevel) {
                             //Particles spawn up to 32 blocks away from the player
@@ -143,7 +144,7 @@ public class FireballHitscanWand extends Item {
                 BlockPos targetBlocks = blockHitResultBlocks.getBlockPos();
                 if(level instanceof ServerLevel serverLevel) {
                     serverLevel.explode(fireballAir, targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(),
-                    explosionPowerOther, Level.ExplosionInteraction.MOB);
+                    explosionPowerOther, Explosion.BlockInteraction.DESTROY);
                     serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
                     serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
                     serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);

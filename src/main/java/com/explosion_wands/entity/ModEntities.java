@@ -3,8 +3,6 @@ package com.explosion_wands.entity;
 import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.initialization.ModInitialization;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
@@ -29,12 +27,12 @@ public class ModEntities {
     //HELPER METHODS
     private static ResourceKey<EntityType<?>> key(String name) {
         return ResourceKey.create(
-                Registries.ENTITY_TYPE,
+                Registry.ENTITY_TYPE.key(),
                 ResourceLocation.tryBuild(ModInitialization.MOD_ID, name));
     }
 
     private static <T extends Entity> EntityType<T> register(ResourceKey<EntityType<?>> key, EntityType<T> entityType) {
-        return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, entityType);
+        return Registry.register(Registry.ENTITY_TYPE, key, entityType);
     }
 
     //Initializes the entity
