@@ -12,6 +12,7 @@ public class ModItems {
     public static int stackSize = 1;
     //Can only have one creative mode category tab in versions 1.19.2 and below, so we assign it to the combat category
     public static CreativeModeTab creativeModeTab = CreativeModeTab.TAB_COMBAT;
+    
 //WANDS
     //FIREBALL BARRAGE WAND (previously FIREBALL STICK BLOCK)
     public static final ResourceKey<Item> FIREBALL_BARRAGE_WAND_KEY =
