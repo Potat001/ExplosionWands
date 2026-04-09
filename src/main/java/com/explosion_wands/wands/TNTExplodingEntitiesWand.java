@@ -115,7 +115,7 @@ public class TNTExplodingEntitiesWand {
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= spawnedEntities - (spawnedEntities / 8) && randomEntity > (spawnedEntities / 2) + (spawnedEntities / 4)) {
-                            entityToSpawn = EntityType.PIG;
+                            entityToSpawn = EntityType.CREEPER;
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= spawnedEntities && randomEntity > spawnedEntities - (spawnedEntities / 8)) {
