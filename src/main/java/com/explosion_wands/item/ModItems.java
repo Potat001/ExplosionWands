@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 
 public class ModItems {
     public static int stackSize = 1;
+    
 //WANDS
     //FIREBALL BARRAGE WAND (previously FIREBALL STICK BLOCK)
     public static final ResourceKey<Item> FIREBALL_BARRAGE_WAND_KEY =
