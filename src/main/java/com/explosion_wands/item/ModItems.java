@@ -5,12 +5,13 @@ import com.explosion_wands.initialization.ModInitialization;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.util.*;
-import org.intellij.lang.annotations.Identifier;
 
 public class ModItems {
     public static int stackSize = 1;
+    //Can only have one creative mode category tab in versions 1.19.2 and below, so we assign it to the combat category
+    public static CreativeModeTab creativeModeTab = CreativeModeTab.TAB_COMBAT;
 //WANDS
     //FIREBALL BARRAGE WAND (previously FIREBALL STICK BLOCK)
     public static final ResourceKey<Item> FIREBALL_BARRAGE_WAND_KEY =
@@ -20,7 +21,7 @@ public class ModItems {
             register(FIREBALL_BARRAGE_WAND_KEY,
                     new FireballBarrageWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //FIREBALL HITSCAN WAND (previously FIREBALL STICK HITSCAN AIR)
     public static final ResourceKey<Item> FIREBALL_HITSCAN_WAND_KEY =
@@ -30,7 +31,7 @@ public class ModItems {
             register(FIREBALL_HITSCAN_WAND_KEY,
                     new FireballHitscanWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //FIREBALL SCATTER WAND (previously TNT FIREBALL STICK EXPLOSION BLOCK)
     public static final ResourceKey<Item> FIREBALL_SCATTER_WAND_KEY =
@@ -40,7 +41,7 @@ public class ModItems {
             register(FIREBALL_SCATTER_WAND_KEY,
                     new FireballScatterWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //FIREBALL SHOTGUN WAND (previously FIREBALL STICK SHOTGUN AIR)
     public static final ResourceKey<Item> FIREBALL_SHOTGUN_WAND_KEY =
@@ -50,7 +51,7 @@ public class ModItems {
             register(FIREBALL_SHOTGUN_WAND_KEY,
                     new FireballShotgunWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //FIREBALL WAND (previously FIREBALL STICK AIR)
     public static final ResourceKey<Item> FIREBALL_WAND_KEY =
@@ -60,7 +61,7 @@ public class ModItems {
             register(FIREBALL_WAND_KEY,
                     new FireballWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT CHICKEN WAND (previously TNT STICK AIR)
     public static final ResourceKey<Item> TNT_CHICKEN_WAND_KEY =
@@ -70,7 +71,7 @@ public class ModItems {
             register(TNT_CHICKEN_WAND_KEY,
                     new TNTChickenWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT EXPLODING BLOCKS WAND (previously TNT STICK FALLING BLOCK)
     public static final ResourceKey<Item> TNT_EXPLODING_BLOCKS_WAND_KEY =
@@ -80,7 +81,7 @@ public class ModItems {
             register(TNT_EXPLODING_BLOCKS_WAND_KEY,
                     new TNTExplodingBlocksWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT EXPLODING ENTITIES WAND (previously TNT STICK ENTITIES BLOCK)
     public static final ResourceKey<Item> TNT_EXPLODING_ENTITIES_WAND_KEY =
@@ -90,7 +91,7 @@ public class ModItems {
             register(TNT_EXPLODING_ENTITIES_WAND_KEY,
                     new TNTExplodingEntitiesWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT FALLING WAND
     public static final ResourceKey<Item> TNT_FALLING_WAND_KEY =
@@ -100,7 +101,7 @@ public class ModItems {
             register(TNT_FALLING_WAND_KEY,
                     new TNTFallingWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT DRILL WAND (previously TNT STICK UNBOUND AIR and TNT INFINITE WAND)
     public static final ResourceKey<Item> TNT_DRILL_WAND_KEY =
@@ -110,7 +111,7 @@ public class ModItems {
             register(TNT_DRILL_WAND_KEY,
                     new TNTDrillWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT INSTANT BARRAGE WAND (previously TNT STICK UNBOUND BLOCK)
     public static final ResourceKey<Item> TNT_INSTANT_BARRAGE_WAND_KEY =
@@ -120,7 +121,7 @@ public class ModItems {
             register(TNT_INSTANT_BARRAGE_WAND_KEY,
                     new TNTInstantBarrageWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT SLOW BARRAGE WAND (previously TNT STICK BLOCK)
     public static final ResourceKey<Item> TNT_SLOW_BARRAGE_WAND_KEY =
@@ -130,7 +131,7 @@ public class ModItems {
             register(TNT_SLOW_BARRAGE_WAND_KEY,
                     new TNTSlowBarrageWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT TORNADO WAND (previously TNT STICK MID AIR)
     public static final ResourceKey<Item> TNT_TORNADO_WAND_KEY =
@@ -140,7 +141,7 @@ public class ModItems {
             register(TNT_TORNADO_WAND_KEY,
                     new TNTTornadoWandItem(
                             new Item.Properties()
-                                    .stacksTo(stackSize)));
+                                    .stacksTo(stackSize).tab(creativeModeTab)));
 
 //HELPER METHODS
     //Creating the item's identity
@@ -151,12 +152,8 @@ public class ModItems {
     }
 
     //Registering the item
-    private static Item register2(ResourceKey<Item> key, Item item) {
-        return Registry.register(BuiltInRegistries.ITEM, key, item);
-    }
-
-    private static Item register(String name, Item item) {
-        return Registry.register(Registry.ITEM_REGISTRY, new Identifier(ModInitialization.MOD_ID, name), item);
+    private static Item register(ResourceKey<Item> key, Item item) {
+        return Registry.register(Registry.ITEM, key, item);
     }
 
     //Initializes the items
