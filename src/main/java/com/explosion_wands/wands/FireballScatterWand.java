@@ -5,7 +5,6 @@ import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import java.util.Random;
 
 public class FireballScatterWand {
 
@@ -27,7 +27,8 @@ public class FireballScatterWand {
             int maxEntities = ExplosionEntities.maxEntities;
             int fuse = ExplosionEntities.fuse;
             int spawnedEntities = ExplosionEntities.spawnedEntities;
-            RandomSource random = RandomSource.create();
+            Random random = new Random();
+
             double maxRandomPos = ExplosionEntities.maxRandomPos;
             double minRandomPos = ExplosionEntities.minRandomPos;
             double randomPos = (maxRandomPos + random.nextDouble() * (maxRandomPos - minRandomPos));

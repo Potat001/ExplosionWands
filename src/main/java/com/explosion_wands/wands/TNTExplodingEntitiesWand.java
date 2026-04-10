@@ -5,7 +5,6 @@ import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import java.util.Random;
 
 public class TNTExplodingEntitiesWand {
 
@@ -33,7 +33,7 @@ public class TNTExplodingEntitiesWand {
             int maxIncrement = ExplosionEntities.maxIncrement;
             int minRandomEntities = ExplosionEntities.minRandomEntity;
             int maxRandomEntities = ExplosionEntities.maxRandomEntity;
-            RandomSource random = RandomSource.create();
+            Random random = new Random();
             double maxRandomPos = ExplosionEntities.maxRandomPos;
             double minRandomPos = ExplosionEntities.minRandomPos;
             float randomExplosion = (minExplosion + random.nextFloat() * (maxExplosion - minExplosion));

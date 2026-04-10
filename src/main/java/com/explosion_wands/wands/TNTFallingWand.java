@@ -5,7 +5,6 @@ import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import java.util.Random;
 
 public class TNTFallingWand {
 
@@ -33,7 +33,7 @@ public class TNTFallingWand {
             float explosionPower = 10.0F;
             int minIncrement = ExplosionEntities.minIncrement;
             int maxIncrement = ExplosionEntities.maxIncrement;
-            RandomSource random = RandomSource.create();
+            Random random = new Random();
             float randomExplosion = (minExplosion + random.nextFloat() * (maxExplosion - minExplosion));
             int randomIncrement = minIncrement + random.nextInt(maxIncrement - minIncrement);
             int increment = ExplosionEntities.increment;

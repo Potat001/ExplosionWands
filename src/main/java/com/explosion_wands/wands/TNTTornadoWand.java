@@ -4,7 +4,6 @@ import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import java.util.Random;
 
 public class TNTTornadoWand extends Item {
     public TNTTornadoWand(Properties properties) {
@@ -25,7 +25,7 @@ public class TNTTornadoWand extends Item {
         float pitch = 1.0F;
         int min = 20;
         int max = 50;
-        RandomSource random = RandomSource.create();
+        Random random = new Random();
         boolean tornado = true;
         boolean gradualEntitySpawnAfterExplosion = false;
         EntityType<?> entityToSpawn = EntityType.TNT;

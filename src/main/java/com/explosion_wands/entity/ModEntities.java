@@ -28,7 +28,7 @@ public class ModEntities {
     private static ResourceKey<EntityType<?>> key(String name) {
         return ResourceKey.create(
                 Registry.ENTITY_TYPE.key(),
-                ResourceLocation.tryBuild(ModInitialization.MOD_ID, name));
+                ResourceLocation.of(name, ModInitialization.MOD_ID));
     }
 
     private static <T extends Entity> EntityType<T> register(ResourceKey<EntityType<?>> key, EntityType<T> entityType) {

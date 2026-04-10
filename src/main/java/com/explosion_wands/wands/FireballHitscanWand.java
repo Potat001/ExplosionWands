@@ -5,7 +5,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +20,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import com.mojang.math.Vector3f;
+import java.util.Random;
 
 public class FireballHitscanWand extends Item {
     public FireballHitscanWand(Properties properties) {
@@ -32,7 +32,8 @@ public class FireballHitscanWand extends Item {
         float pitch = 1.0F;
         double min = 2.0;
         double max = 10.0;
-        RandomSource random = RandomSource.create();
+        Random random = new Random();
+
         double randomDistr1 = min + random.nextDouble() * (max - min);
         double randomDistr2 = min + random.nextDouble() * (max - min);
         double randomDistr3 = min + random.nextDouble() * (max - min);

@@ -9,7 +9,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-
 import java.util.*;
 
 public class TNTSlowBarrageWand {
@@ -58,7 +56,7 @@ public class TNTSlowBarrageWand {
 			int particleSpeed = 1;
 			int moduloParticle = 6;
 			int moduloRest = 1;
-			RandomSource random = RandomSource.create();
+			Random random = new Random();
 			//Randomized the distribution of particle effects based on the min/max values specified
 			double randomDistr = min + random.nextDouble() * (max - min);
 			//Makes the start spawn angle of the TNT be equal to the direction the player is facing (default (0): east)

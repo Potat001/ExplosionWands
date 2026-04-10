@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 
 public class ModInitialization implements ModInitializer {
-    public static final String MOD_ID = "explosion_wands";
+    public static final char MOD_ID = 'e';
 
     @Override
     public void onInitialize() {
