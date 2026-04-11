@@ -3,18 +3,24 @@ package com.explosion_wands.wands;
 import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
+import net.minecraft.client.renderer.entity.FallingBlockRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -130,12 +136,19 @@ public class TNTExplodingBlocksWand {
                             blockType = blockToSpawn.toString();
                         }
                         customTnt = ModEntities.CUSTOM_TNT.create(level);
+
+                        BlockState state = level.getBlockState(target);
+                        level.removeBlock(target, false);
+                        FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(level, target.getX(), target.getY(), target.getZ(), state);
+
                         //Adds the entity to the world
+                        /*
                         FallingBlockEntity fallingBlockEntity = FallingBlockEntity.fall(
                                 level,
                                 target,
                                 blockToSpawn
                         );
+                         */
                         //Simply: having a lot of dropped items in the world is bad for performance
                         fallingBlockEntity.dropItem = false;
                         //This does not make a perfect circle, but it should not be noticeable
@@ -148,6 +161,9 @@ public class TNTExplodingBlocksWand {
                             customTnt.setFuse(fuse);
                             customTnt.setExplosionPower(randomIncrement);
                         }
+
+                        level.addFreshEntity(fallingBlockEntity);
+
                         if (x != 0 && y != 0 && z != 0) {
                             fallingBlockEntity.setPos(target.getX() + x,
                                     target.getY() + y,
@@ -156,6 +172,7 @@ public class TNTExplodingBlocksWand {
                         } else {
                             fallingBlockEntity.discard();
                         }
+
                         x = r * Math.sin(theta) * Math.cos(phi) + randomPos;
                         y = r * Math.cos(theta) + randomPos;
                         z = r * Math.sin(theta) * Math.sin(phi) + randomPos;
