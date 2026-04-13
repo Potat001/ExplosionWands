@@ -23,8 +23,9 @@ public class FireballWand extends Item {
         float pitch = 1.0F;
         BlockHitResult blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         int explosionPowerAir = 50;
-        //fireball's velocity
-        //Changes it to 5 since the game doesn't do well when the velocity is above 5 in this and probably other versions.
+        //Fireball's velocity
+        //Seems to lag noticeably more in this version when a lot of wands have been used a lot, but we still keep it at
+        //5, since it should only be noticeable when there's a lot going on, which will make it lag regardless
         //Makes the explosion power slightly higher to compensate
         int velocity = 5;
         double scale = 2.5;
