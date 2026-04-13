@@ -40,7 +40,7 @@ public class FireballShotgunWand extends Item {
         Vec3 playerStartDirForward = player.getLookAngle();
         Vec3 playerUpDir = player.getUpVector(1.0F);
         Vec3 directlyUp = new Vec3(1,0,0);
-        Vec3 playerStartDir = player.getEyePosition();
+        Vec3 playerStartDir = player.getEyePosition(0);
         playerStartDirForward.add(dirX, dirY, dirZ).normalize();
         Vec3 playerStartDirRight = playerStartDirForward.cross(playerUpDir).normalize();
         for(int i = 0; i < fireballAmount; i++) {
@@ -50,8 +50,9 @@ public class FireballShotgunWand extends Item {
                     player,
                     playerStartDirForward.x(),
                     playerStartDirForward.y(),
-                    playerStartDirForward.z(),
-                    explosionPowerAir);
+                    playerStartDirForward.z()
+            );
+            fireballAir.explosionPower = explosionPowerAir;
             //Fireball's initial spawn position
             if(blockHitResult.getType() != HitResult.Type.BLOCK) {
                     Vec3 fireballInAirPosition = playerStartDir.add(playerStartDirForward.scale(playerStartDirForwardScale)) //in front
@@ -75,9 +76,6 @@ public class FireballShotgunWand extends Item {
             fireballAir.addTag("fireball");
             //Spawns the fireball
             server.addFreshEntity(fireballAir);
-            if(fireballAir.touchingUnloadedChunk()) {
-                fireballAir.discard();
-            }
             changePos += incremented;
         }
             level.playSound(null, player.getX(), player.getY(), player.getZ(),

@@ -48,9 +48,9 @@ public class FireballHitscanWand extends Item {
         //Think it's fair and more fun to make the explosion power much higher when clicking on entities
         float explosionPowerEntity = 50F;
         float explosionPowerOther = 30F;
-        Vector3f particleColor1 = new Vector3f(16711680, 16711680, 16711680);
-        Vector3f particleColor2 = new Vector3f(500000, 500000, 500000);
-        Vector3f particleColor3 = new Vector3f(3000, 3000, 3000);
+        float particleColor1 = 16711680;
+        float particleColor2 = 500000;
+        float particleColor3 = 3000;
         int particleScale = 5;
         int particleThickness = 100;
         int particleSpeed = 2;
@@ -58,7 +58,7 @@ public class FireballHitscanWand extends Item {
         double dirY = player.getY();
         double dirZ = player.getZ();
         Vec3 playerLookDir = player.getLookAngle();
-        Vec3 playerStartDir = player.getEyePosition();
+        Vec3 playerStartDir = player.getEyePosition(0);
         Vec3 playerEndDirEntities = playerStartDir.add(playerLookDir.scale(reachEntities));
         Vec3 playerEndDirBlocks = playerStartDir.add(playerLookDir.scale(reachBlocks));
         playerLookDir.add(dirX, dirY, dirZ).normalize();
@@ -67,8 +67,8 @@ public class FireballHitscanWand extends Item {
                 player,
                 dirX,
                 dirY,
-                dirZ,
-                explosionPowerAir);
+                dirZ);
+        fireballAir.explosionPower = explosionPowerAir;
         //Target entity
         EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                 level,
@@ -80,7 +80,7 @@ public class FireballHitscanWand extends Item {
                 entity -> entity instanceof Entity
                 //Ensures that we can't hit the hitbox of dead entities
                 && entity.isAlive()
-                && !entity.isRemoved()
+                && !entity.removed
                 && entity != player);
         BlockHitResult blockHitResultEntities = level.clip(new ClipContext(
                 playerStartDir,
@@ -124,20 +124,17 @@ public class FireballHitscanWand extends Item {
                         if (level instanceof ServerLevel serverLevel) {
                             //Particles spawn up to 32 blocks away from the player
                             //32-bit integer limit: 2147483647
-                            serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
-                            serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
-                            serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);
+                            serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleColor1, particleColor1, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
+                            serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleColor2, particleColor2, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
+                            serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleColor3, particleColor3, particleScale), targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);
                             //Guarantees that we kill the entity that we clicked on
                             entityHitResult.getEntity().kill();
                         }
                         //Fireball is fake now, discards it when spawned so it doesn't appear after exploding
                         //This also causes the player to not get the return to sender achievement as a side effect
-                        fireballAir.discard();
+                        fireballAir.remove();
                         fireballAir.addTag("fireball");
 
-                        if(fireballAir.touchingUnloadedChunk()) {
-                            fireballAir.discard();
-                        }
                         //Since fireball gets removed before it's spawned into the world, we can just return null
                         return null;
                     }
@@ -146,9 +143,9 @@ public class FireballHitscanWand extends Item {
                 if(level instanceof ServerLevel serverLevel) {
                     serverLevel.explode(fireballAir, targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(),
                     explosionPowerOther, Explosion.BlockInteraction.DESTROY);
-                    serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
-                    serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
-                    serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);
+                    serverLevel.sendParticles(new DustParticleOptions(particleColor1, particleColor1, particleColor1, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr1, randomDistr1, randomDistr1, particleSpeed);
+                    serverLevel.sendParticles(new DustParticleOptions(particleColor2, particleColor2, particleColor2, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr2, randomDistr2, randomDistr2, particleSpeed);
+                    serverLevel.sendParticles(new DustParticleOptions(particleColor3, particleColor3, particleColor3, particleScale), targetBlocks.getX(), targetBlocks.getY(), targetBlocks.getZ(), particleThickness, randomDistr3, randomDistr3, randomDistr3, particleSpeed);
                 }
         return null;
     }

@@ -53,7 +53,7 @@ public class TNTExplodingEntitiesWand {
             int reachEntities = ExplosionEntities.reachEntities;
             int reachBlock = ExplosionEntities.reachBlock;
             int inflate = ExplosionEntities.inflate;
-            Vec3 playerEyeStart = player.getEyePosition();
+            Vec3 playerEyeStart = player.getEyePosition(0);
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
             CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
@@ -66,9 +66,8 @@ public class TNTExplodingEntitiesWand {
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     entity -> entity instanceof Entity
                             && entity.isAlive()
-                            && !entity.isRemoved()
-                            && entity != player,
-                    0);
+                            && !entity.removed
+                            && entity != player);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -111,7 +110,8 @@ public class TNTExplodingEntitiesWand {
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 2) + (spawnedEntities / 4) && randomEntity > (spawnedEntities / 2) + (spawnedEntities / 8)) {
-                            entityToSpawn = EntityType.GOAT;
+                            //Goats don't exist in this version, so replaces them with instead shulkers instead
+                            entityToSpawn = EntityType.SHULKER;
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= spawnedEntities - (spawnedEntities / 8) && randomEntity > (spawnedEntities / 2) + (spawnedEntities / 4)) {
@@ -142,7 +142,7 @@ public class TNTExplodingEntitiesWand {
                                 );
                                 serverLevel.addFreshEntity(entity);
                             } else {
-                                entity.discard();
+                                entity.remove();
                             }
                             x = r * Math.sin(theta) * Math.cos(phi) + randomPos;
                             y = r * Math.cos(theta) + randomPos;

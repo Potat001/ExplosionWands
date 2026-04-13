@@ -49,7 +49,7 @@ public class TNTFallingWand {
             int reachEntities = ExplosionEntities.reachEntities;
             int reachBlock = ExplosionEntities.reachBlock;
             int inflate = ExplosionEntities.inflate;
-            Vec3 playerEyeStart = player.getEyePosition();
+            Vec3 playerEyeStart = player.getEyePosition(0);
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
             CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
@@ -62,9 +62,8 @@ public class TNTFallingWand {
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     entity -> entity instanceof Entity
                     && entity.isAlive()
-                    && !entity.isRemoved()
-                    && entity != player,
-                    0);
+                    && !entity.removed
+                    && entity != player);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -104,7 +103,7 @@ public class TNTFallingWand {
                                 customTnt2.setExplosionPower(explosionPower);
                                 serverLevel.addFreshEntity(customTnt2);
                             } else {
-                                customTnt2.discard();
+                                customTnt2.remove();
                             }
                             x = r * Math.sin(theta) * Math.cos(phi);
                             y = r * Math.cos(theta);

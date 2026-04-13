@@ -67,9 +67,6 @@ public class TNTChickenWand extends Item {
                 customTnt.setEntityToSpawn(entityToSpawn);
                 customTnt.setEntityAmount(entityAmount);
                 customTnt.setGradualEntitySpawnAfterExplosion(gradualSpawnAfterExplosion);
-                if(customTnt.touchingUnloadedChunk()) {
-                    customTnt.discard();
-                }
                 level.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
                 return customTnt;

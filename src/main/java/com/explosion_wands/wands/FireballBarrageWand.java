@@ -46,10 +46,10 @@ public class FireballBarrageWand {
         int degrees = 90;
         if(level instanceof ServerLevel serverLevel) {
             Vec3 dir = new Vec3(xDir, yDir, zDir);
-            double angle = Math.toRadians(player.getYRot() + degrees);
+            double angle = Math.toRadians(player.getViewYRot(0) + degrees);
             //Makes the fireballs equally spread out
             double angleStep = Math.PI / ((double) newFireballAmount);
-            Vec3 playerEyeStart = player.getEyePosition();
+            Vec3 playerEyeStart = player.getEyePosition(0);
             //Also how far away the fireballs spawn from the player
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
@@ -58,8 +58,9 @@ public class FireballBarrageWand {
                     player,
                     xDir,
                     yDir,
-                    zDir,
-                    explosionPower);
+                    zDir
+            );
+            largeFireball.explosionPower = explosionPower;
             EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                     level,
                     largeFireball,
@@ -70,7 +71,7 @@ public class FireballBarrageWand {
                     entity -> entity instanceof Entity
                     //Ensures that we can't hit the hitbox of dead entities
                     && entity.isAlive()
-                    && !entity.isRemoved()
+                    && !entity.removed
                     && entity != player);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
@@ -89,8 +90,9 @@ public class FireballBarrageWand {
                         player,
                         xDir,
                         yDir,
-                        zDir,
-                        explosionPower);
+                        zDir
+                );
+                largeFireball.explosionPower = explosionPower;
                 largeFireball.setPos(
                         target.getX() + (Math.cos(angle) * amplitude),
                         target.getY() + spawnHeight,

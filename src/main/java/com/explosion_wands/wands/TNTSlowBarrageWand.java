@@ -60,12 +60,12 @@ public class TNTSlowBarrageWand {
 			//Randomized the distribution of particle effects based on the min/max values specified
 			double randomDistr = min + random.nextDouble() * (max - min);
 			//Makes the start spawn angle of the TNT be equal to the direction the player is facing (default (0): east)
-			final double[] angle = {Math.toRadians(player.getYRot() + angleValue)};
+			final double[] angle = {Math.toRadians(player.getYHeadRot() + angleValue)};
 			double angleStep = Math.PI / ((double) tntAmount / 2); //How smooth the curve looks
 			double amplitude = 15; //Width of the curve
 			//Making sure the primed TNTs explode when all the primed TNTs in the current loop has spawned
 			int tntFuseTimer = (tntAmount * 50) / (50 * tntAmountPerTick) ; //50 ms = 1 tick
-			Vec3 playerEyeStart = player.getEyePosition();
+			Vec3 playerEyeStart = player.getEyePosition(0);
 			Vec3 playerLookAngle = player.getLookAngle();
 			Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlocks));
 			//Makes a duplicate, unused CustomTnt so we're able to get entityHitResult working without
@@ -80,9 +80,8 @@ public class TNTSlowBarrageWand {
 					player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
 					entity -> entity instanceof Entity
 					&& entity.isAlive()
-					&& !entity.isRemoved()
-					&& entity != player,
-					0);
+					&& !entity.removed
+					&& entity != player);
 			final BlockHitResult blockHitResult = level.clip(new ClipContext(
 					playerEyeStart,
 					playerEyeEnd,
@@ -125,9 +124,6 @@ public class TNTSlowBarrageWand {
 							spawnHeight[defaultValues] -= 0.25;
 							//Adds the primed TNT to the world
 							serverLevel.addFreshEntity(customTnt);
-							if(customTnt.touchingUnloadedChunk()) {
-								customTnt.discard();
-							}
 							//Kind of a hacky way to play a sound only at the very start of the loop
 							if(finalI1 == 0) {
                                 //Makes the sound play as close to the y direction the player is at

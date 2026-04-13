@@ -53,7 +53,7 @@ public class FireballScatterWand {
             int reachEntities = ExplosionEntities.reachEntities;
             int reachBlock = ExplosionEntities.reachBlock;
             int inflate = ExplosionEntities.inflate;
-            Vec3 playerEyeStart = player.getEyePosition();
+            Vec3 playerEyeStart = player.getEyePosition(0);
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
             LargeFireball fireball = new LargeFireball(
@@ -61,8 +61,9 @@ public class FireballScatterWand {
                     player,
                     playerLookAngle.x(),
                     playerLookAngle.y(),
-                    playerLookAngle.z(),
-                    fireballExplosionPower);
+                    playerLookAngle.z()
+            );
+            fireball.explosionPower = fireballExplosionPower;
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -80,7 +81,7 @@ public class FireballScatterWand {
                     entity -> entity instanceof Entity
                             //Ensures that we can't hit the hitbox of dead entities
                             && entity.isAlive()
-                            && !entity.isRemoved()
+                            && !entity.removed
                             && entity != player);
             BlockPos target = blockHitResult.getBlockPos();
             if (entityHitResult != null) {
@@ -95,8 +96,9 @@ public class FireballScatterWand {
                                 player,
                                 playerLookAngle.x(),
                                 playerLookAngle.y(),
-                                playerLookAngle.z(),
-                                fireballExplosionPower);
+                                playerLookAngle.z()
+                        );
+                        fireball.explosionPower = fireballExplosionPower;
                         CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
                         //This does not make a perfect circle, but it should not be noticeable
                         if (increment <= randomExplosion && customTnt != null) {
@@ -118,7 +120,7 @@ public class FireballScatterWand {
                             fireball.addTag("fireball");
                             serverLevel.addFreshEntity(fireball);
                         } else {
-                            fireball.discard();
+                            fireball.remove();
                         }
                         //Changes the initial angle by the value of angleStep every iteration so the TNTs are not static
                         //Height of the cos curve every iteration

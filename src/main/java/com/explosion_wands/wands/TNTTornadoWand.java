@@ -73,9 +73,6 @@ public class TNTTornadoWand extends Item {
             customTnt.setEntityAmount(entityAmount);
             customTnt.setKillEntitiesAfterLoop(killEntitiesAfterLoop);
             customTnt.setYIncrement(yIncrement);
-            if(customTnt.touchingUnloadedChunk()) {
-                customTnt.discard();
-            }
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
             SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
             return customTnt;

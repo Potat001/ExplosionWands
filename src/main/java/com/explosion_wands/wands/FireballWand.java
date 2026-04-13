@@ -42,8 +42,9 @@ public class FireballWand extends Item {
                 player,
                 playerLookDir.x(),
                 playerLookDir.y(),
-                playerLookDir.z(),
-                explosionPowerAir);
+                playerLookDir.z()
+        );
+        fireballAir.explosionPower = explosionPowerAir;
         if (level instanceof ServerLevel server) {
             if (blockHitResult.getType() != HitResult.Type.BLOCK) {
                 Vec3 fireballInAirPosition = player.position().add(addedXDir, addedYDir, addedZDir)
@@ -60,9 +61,6 @@ public class FireballWand extends Item {
             fireballAir.setDeltaMovement(playerLookDir.scale(velocity));
             fireballAir.addTag("fireball");
             //Spawns the fireball
-            if (fireballAir.touchingUnloadedChunk()) {
-                fireballAir.discard();
-            }
             server.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, volume, pitch);
         }

@@ -32,7 +32,7 @@ public class TNTInstantBarrageWand {
             int inflate = 100;
             int tntAmount = 80;
             //Makes the start spawn angle of the TNT be equal to the direction the player is facing (default (0): east)
-            final double[] angle = {Math.toRadians(player.getYRot() + 90)};
+            final double[] angle = {Math.toRadians(player.getYHeadRot() + 90)};
             double angleStep = Math.PI / ((double) tntAmount / 2); //How smooth the curve looks
             double amplitude = 15; //Width of the curve
             int initialPos = 0;
@@ -40,7 +40,7 @@ public class TNTInstantBarrageWand {
             int fuse = 200;
             float explosionPower = 10.0F;
             boolean explodeOnContact = true;
-            Vec3 playerEyeStart = player.getEyePosition();
+            Vec3 playerEyeStart = player.getEyePosition(0);
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlocks));
             CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
@@ -53,9 +53,8 @@ public class TNTInstantBarrageWand {
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     entity -> entity instanceof Entity
                     && entity.isAlive()
-                    && !entity.isRemoved()
-                    && entity != player,
-                    0);
+                    && !entity.removed
+                    && entity != player);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -81,9 +80,6 @@ public class TNTInstantBarrageWand {
                     customTnt.setExplodeOnContact(explodeOnContact);
                     //Adds the primed TNT to the world
                     serverLevel.addFreshEntity(customTnt);
-                    if (customTnt.touchingUnloadedChunk()) {
-                        customTnt.discard();
-                    }
                     //Changes the initial angle by the value of angleStep every iteration so the TNTs are not static
                     angle[angleValue] += angleStep;
                     //Height of the cos curve every iteration

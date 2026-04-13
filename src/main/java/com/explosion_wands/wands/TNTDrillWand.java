@@ -51,9 +51,6 @@ public class TNTDrillWand extends Item {
                 customTnt.setExplodeOnContact(explodeOnContact);
                 customTnt.setExplosionPower(explosionPower);
                 customTnt.setFuse(fuse);
-                if(customTnt.touchingUnloadedChunk()) {
-                customTnt.discard();
-                }
                 level.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
                 return customTnt;

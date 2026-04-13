@@ -20,6 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class TNTExplodingBlocksWand {
 
@@ -57,7 +58,7 @@ public class TNTExplodingBlocksWand {
             int reachEntities = ExplosionEntities.reachEntities;
             int reachBlock = ExplosionEntities.reachBlock;
             int inflate = ExplosionEntities.inflate;
-            Vec3 playerEyeStart = player.getEyePosition();
+            Vec3 playerEyeStart = player.getEyePosition(0);
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
             CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
@@ -70,9 +71,8 @@ public class TNTExplodingBlocksWand {
                     player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
                     entity -> entity instanceof Entity
                             && entity.isAlive()
-                            && !entity.isRemoved()
-                            && entity != player,
-                    0);
+                            && !entity.removed
+                            && entity != player);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -112,7 +112,8 @@ public class TNTExplodingBlocksWand {
                             blockType = blockToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 8) * 2 + (spawnedEntities / 8) && randomEntity > (spawnedEntities / 4)) {
-                            blockToSpawn = Blocks.AMETHYST_BLOCK.defaultBlockState();
+                            //Amethyst blocks don't exist in this version, so replaces them with packed ice instead
+                            blockToSpawn = Blocks.PACKED_ICE.defaultBlockState();
                             blockType = blockToSpawn.toString();
                         }
                         if (randomEntity <= spawnedEntities / 2 && randomEntity > (spawnedEntities / 8) * 2 + (spawnedEntities / 8)) {
@@ -161,7 +162,7 @@ public class TNTExplodingBlocksWand {
                             fallingBlockEntity.time = 100;
                             level.addFreshEntity(fallingBlockEntity);
                         } else {
-                            fallingBlockEntity.discard();
+                            fallingBlockEntity.remove();
                         }
 
                         //Simply: having a lot of dropped items in the world is bad for performance

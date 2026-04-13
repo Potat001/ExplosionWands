@@ -109,7 +109,7 @@ public class CustomTnt extends PrimedTnt {
                 this.getBoundingBox().expandTowards(playerLookDir.scale(reachEntities)).inflate(inflate),
                 entity -> entity instanceof Entity
                 && entity.isAlive()
-                && !entity.isRemoved()
+                && !entity.removed
                 && entity != this,
                 0);
         return entityHitResult != null;
@@ -241,10 +241,10 @@ public class CustomTnt extends PrimedTnt {
             //Failsafe if the time between the primedTNT explosions is less than or equal to 1, which prevents the primedTNT
             //from continuously exploding in one spot, aka when its effective explosion power is less than the block it's standing on
             if (discardTNT) {
-                this.discard();
+                this.remove();
             }
             if(ticksSinceLastExplosion <= 1 || explosionAmount >= 200) {
-                    this.discard();
+                    this.remove();
                 serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(), getY() + 2, getZ(), 2000, 4, 4, 4, 0.1);
             }
             //Debugging
