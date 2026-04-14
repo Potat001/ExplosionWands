@@ -12,11 +12,6 @@ public class ModEntities {
     public static float sizedG = 0.98F;
     public static String customTnt = "custom_tnt";
     //CUSTOM TNT
-    /*
-    public static final ResourceKey<EntityType<?>> CUSTOM_TNT_KEY =
-            key(customTnt);
-     */
-
     public static final EntityType<CustomTnt> CUSTOM_TNT =
             register(customTnt,
                             EntityType
@@ -25,15 +20,6 @@ public class ModEntities {
                                     .sized(sizedF, sizedG)
                                     //This causes it to throw a warning in the console, but it should be harmless
                                     .build(customTnt));
-
-    //HELPER METHODS
-    /*
-    private static ResourceKey<EntityType<?>> key(String name) {
-        return ResourceKey.create(
-                Registry.ENTITY_TYPE.key(),
-                ResourceLocation.of(name, ModInitialization.MOD_ID));
-    }
-     */
 
     private static <T extends Entity> EntityType<T> register(String name, EntityType<T> entityType) {
         return Registry.register(Registry.ENTITY_TYPE, name, entityType);
