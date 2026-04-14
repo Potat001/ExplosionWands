@@ -2,6 +2,7 @@ package com.explosion_wands.wands;
 
 import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -21,7 +22,7 @@ public class TNTDrillWand extends Item {
     public static PrimedTnt asPrimedTnt(Level level, Player player) {
         float volume = 0.4F;
         float pitch = 1.0F;
-        int velocity = 4;
+        int velocity = 10;
         BlockHitResult blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         double dirX = player.getX();
         double dirY = player.getY();

@@ -51,7 +51,6 @@ public class TNTSlowBarrageWand {
 			int defaultValues = 0;
 			float explosionPower = 6.0F;
 			boolean explodeOnContact = false;
-			double defaultGravity = 0.15;
 			int particleThickness = 700;
 			int particleSpeed = 1;
 			int moduloParticle = 6;

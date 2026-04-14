@@ -38,7 +38,7 @@ public class TNTTornadoWand extends Item {
         int entityAmount = 200;
         boolean killEntitiesAfterLoop = false;
         double yIncrement = 0.5;
-        int velocity = 4;
+        int velocity = 10;
         BlockHitResult blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         double dirX = player.getX();
         double dirY = player.getY();

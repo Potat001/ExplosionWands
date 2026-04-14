@@ -110,8 +110,8 @@ public class TNTExplodingEntitiesWand {
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 2) + (spawnedEntities / 4) && randomEntity > (spawnedEntities / 2) + (spawnedEntities / 8)) {
-                            //Goats don't exist in this version, so replaces them with instead shulkers instead
-                            entityToSpawn = EntityType.SHULKER;
+                            //Goats don't exist in this version, so replaces them with instead wolves instead
+                            entityToSpawn = EntityType.WOLF;
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= spawnedEntities - (spawnedEntities / 8) && randomEntity > (spawnedEntities / 2) + (spawnedEntities / 4)) {

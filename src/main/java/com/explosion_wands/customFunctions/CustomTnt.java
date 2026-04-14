@@ -11,12 +11,10 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomTnt extends PrimedTnt {
-
     public CustomTnt(EntityType<? extends CustomTnt> type, Level level) {
         super(type, level);
     }
@@ -24,8 +22,7 @@ public class CustomTnt extends PrimedTnt {
     //Ability to separate the values for the explosion power of TNTs for different classes
     float explosionPower = 4.0F; //Default: 4.0F
 
-    //CUSTOM-MADE
-
+//CUSTOM-MADE
     //onGround makes the primedTNT only explode when it hits a horizontal surface, not a vertical surface
     boolean explodeOnContact = false;
     //Type of entity that will spawn after explosion
@@ -85,7 +82,6 @@ public class CustomTnt extends PrimedTnt {
 
     //If the primed TNT should explode given *these* conditions
     protected boolean shouldExplode() {
-
         return ((getFuse() <= 0 && !level.isClientSide())
                 || ((this.horizontalCollision || this.verticalCollision)
                 || hitEntity()
@@ -132,7 +128,6 @@ public class CustomTnt extends PrimedTnt {
             if(!discardTNT) {
                 serverLevel.sendParticles(ParticleTypes.FLAME, getX(), getY() - 1, getZ(), 700, 1.5, 1.5, 1.5, 0.1);
             }
-
             exploded = true;
         }
     }
@@ -179,6 +174,7 @@ public class CustomTnt extends PrimedTnt {
                             changeZ[0] = zChange;
                             angle[0] += angleStep;
                             changePosition[0] += Math.PI / ((double) (entityAmount / 4) / 2);
+                            server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
                             //The shape is no longer hardcoded to be a circle, so the player can have
                             //a lot more options for how they want the entity spawn positions to look
                         } else {
@@ -189,6 +185,7 @@ public class CustomTnt extends PrimedTnt {
                             changeX[0] += xChange;
                             changeY[0] += yChange;
                             changeZ[0] += zChange;
+                            server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
                         }
                         server.addFreshEntity(entity);
                         if(entityToSpawn != EntityType.TNT) {

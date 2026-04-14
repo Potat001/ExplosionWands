@@ -3,6 +3,7 @@ package com.explosion_wands.wands;
 import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,6 +19,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Random;
+
 public class TNTInstantBarrageWand {
 
     public static InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)  {
@@ -26,11 +29,20 @@ public class TNTInstantBarrageWand {
             float volume = 0.4F;
             float pitch = 1.0F;
             int spawnHeight = 30;
+            double min = 1.0;
+            double max = 4.0;
             int spawnHeightSound = 5;
             int reachEntities = 128;
             int reachBlocks = 512;
             int inflate = 100;
             int tntAmount = 80;
+            int moduloParticle = 2;
+            int moduloRest = 1;
+            int particleThickness = 200;
+            double particleSpeed = 0.5;
+            Random random = new Random();
+            //Randomized the distribution of particle effects based on the min/max values specified
+            double randomDistr = min + random.nextDouble() * (max - min);
             //Makes the start spawn angle of the TNT be equal to the direction the player is facing (default (0): east)
             final double[] angle = {Math.toRadians(player.getYHeadRot() + 90)};
             double angleStep = Math.PI / ((double) tntAmount / 2); //How smooth the curve looks
@@ -76,6 +88,10 @@ public class TNTInstantBarrageWand {
                             target.getY() + spawnHeight,
                             target.getZ() + (Math.sin(angle[angleValue]) * amplitude));
                     customTnt.setFuse(fuse);
+                    if ((i % moduloParticle) == moduloRest) {
+                        //Particles only spawn 32 blocks away from the player. Might bypass in future
+                        serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, customTnt.getX(), customTnt.getY(), customTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
+                    }
                     customTnt.setExplosionPower(explosionPower);
                     customTnt.setExplodeOnContact(explodeOnContact);
                     //Adds the primed TNT to the world

@@ -4,6 +4,7 @@ import com.explosion_wands.customFunctions.CustomTnt;
 import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -31,11 +32,18 @@ public class TNTFallingWand {
             int secondFuse = 200;
             boolean explodeOnContact = true;
             float explosionPower = 10.0F;
+            int particleThickness = 700;
+            int particleSpeed = 1;
+            int moduloParticle = 10;
+            int moduloRest = 1;
             int minIncrement = ExplosionEntities.minIncrement;
             int maxIncrement = ExplosionEntities.maxIncrement;
             Random random = new Random();
             float randomExplosion = (minExplosion + random.nextFloat() * (maxExplosion - minExplosion));
             int randomIncrement = minIncrement + random.nextInt(maxIncrement - minIncrement);
+            double min = 1.0;
+            double max = 4.0;
+            double randomDistr = min + random.nextDouble() * (max - min);
             int increment = ExplosionEntities.increment;
             double lessThanTheta = ExplosionEntities.lessThanTheta;
             double lessThanPhi = ExplosionEntities.lessThanPhi;
@@ -102,6 +110,10 @@ public class TNTFallingWand {
                                 customTnt2.setExplodeOnContact(explodeOnContact);
                                 customTnt2.setExplosionPower(explosionPower);
                                 serverLevel.addFreshEntity(customTnt2);
+                                if ((increment % moduloParticle) == moduloRest) {
+                                    //Particles only spawn 32 blocks away from the player. Might bypass in future
+                                    serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, customTnt2.getX(), customTnt2.getY(), customTnt2.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
+                                }
                             } else {
                                 customTnt2.remove();
                             }

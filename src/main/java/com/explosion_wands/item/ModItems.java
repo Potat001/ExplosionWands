@@ -3,7 +3,6 @@ package com.explosion_wands.item;
 import com.explosion_wands.item_classes.*;
 import com.explosion_wands.initialization.ModInitialization;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
