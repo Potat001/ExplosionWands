@@ -34,7 +34,7 @@ public class TNTFallingWand {
             float explosionPower = 10.0F;
             int particleThickness = 700;
             int particleSpeed = 1;
-            int moduloParticle = 10;
+            int moduloParticle = 12;
             int moduloRest = 1;
             int minIncrement = ExplosionEntities.minIncrement;
             int maxIncrement = ExplosionEntities.maxIncrement;
