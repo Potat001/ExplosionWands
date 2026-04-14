@@ -17,7 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class FireballScatterWand {
 
@@ -46,6 +49,7 @@ public class FireballScatterWand {
             double y = ExplosionEntities.y;
             double z = ExplosionEntities.z;
             double r;
+            Vec3 dir = new Vec3(0, 0, 0);
             r = 8;
             int spawnHeight;
             spawnHeight = 17;
@@ -71,21 +75,15 @@ public class FireballScatterWand {
                     ClipContext.Fluid.NONE,
                     player
             ));
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                    level,
-                    fireball,
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
-                    player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
-                    //Makes it so that we can hit any type of entity
-                    entity -> entity instanceof Entity
-                            //Ensures that we can't hit the hitbox of dead entities
-                            && entity.isAlive()
-                            && !entity.removed
-                            && entity != player);
-            BlockPos target = blockHitResult.getBlockPos();
+                    player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
+                    Predicate.isEqual(playerLookAngle),
+                    0);
+            Vec3 target = blockHitResult.getLocation();
             if (entityHitResult != null) {
-                target = entityHitResult.getEntity().blockPosition();
+                target = entityHitResult.getEntity().position();
             }
             //Failsafe in-case we spawn more entities than is intended
             if (spawnedEntities <= maxEntities) {
@@ -102,9 +100,9 @@ public class FireballScatterWand {
                         CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
                         //This does not make a perfect circle, but it should not be noticeable
                         if (increment <= randomExplosion && customTnt != null) {
-                            customTnt.setPos(target.getX(),
-                                    target.getY() + spawnHeight,
-                                    target.getZ()
+                            customTnt.setPos(target.x,
+                                    target.y + spawnHeight,
+                                    target.z
                             );
                             serverLevel.addFreshEntity(customTnt);
                             customTnt.setFuse(fuse);
@@ -113,9 +111,9 @@ public class FireballScatterWand {
                         //Creates fireball every iteration
                         //X dir: cos, Z dir: sin, makes a circle
                         if (x != 0 && y != 0 && z != 0) {
-                            fireball.setPos(target.getX() + x,
-                                    target.getY() - y + spawnHeight,
-                                    target.getZ() - z
+                            fireball.setPos(target.x + x,
+                                    target.x - y + spawnHeight,
+                                    target.z - z
                             );
                             fireball.addTag("fireball");
                             serverLevel.addFreshEntity(fireball);

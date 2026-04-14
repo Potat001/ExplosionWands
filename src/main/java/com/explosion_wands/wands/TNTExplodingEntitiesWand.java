@@ -17,7 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class TNTExplodingEntitiesWand {
 
@@ -49,6 +52,7 @@ public class TNTExplodingEntitiesWand {
             double y = ExplosionEntities.y;
             double z = ExplosionEntities.z;
             double r = ExplosionEntities.r;
+            Vec3 dir = new Vec3(0, 0, 0);
             int spawnHeight = ExplosionEntities.spawnHeight;
             int reachEntities = ExplosionEntities.reachEntities;
             int reachBlock = ExplosionEntities.reachBlock;
@@ -58,16 +62,12 @@ public class TNTExplodingEntitiesWand {
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
             CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
             assert customTnt != null;
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                    level,
-                    customTnt,
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
-                    player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
-                    entity -> entity instanceof Entity
-                            && entity.isAlive()
-                            && !entity.removed
-                            && entity != player);
+                    player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
+                    Predicate.isEqual(playerLookAngle),
+                    0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -79,9 +79,9 @@ public class TNTExplodingEntitiesWand {
             //For debugging purposes
             String entityType = "";
 
-            BlockPos target = blockHitResult.getBlockPos();
+            Vec3 target = blockHitResult.getLocation();
             if (entityHitResult != null) {
-                target = entityHitResult.getEntity().blockPosition();
+                target = entityHitResult.getEntity().position();
             }
             //Failsafe in-case we spawn more entities than is intended
             if (spawnedEntities <= maxEntities) {
@@ -126,9 +126,9 @@ public class TNTExplodingEntitiesWand {
                         customTnt = ModEntities.CUSTOM_TNT.create(level);
                         //This does not make a perfect circle, but it should not be noticeable
                         if (increment <= randomExplosion && customTnt != null) {
-                            customTnt.setPos(target.getX(),
-                                    target.getY() + spawnHeight,
-                                    target.getZ()
+                            customTnt.setPos(target.x,
+                                    target.y + spawnHeight,
+                                    target.z
                             );
                             serverLevel.addFreshEntity(customTnt);
                             customTnt.setFuse(fuse);
@@ -136,9 +136,9 @@ public class TNTExplodingEntitiesWand {
                         }
                         if (entity != null) {
                             if (x != 0 && y != 0 && z != 0) {
-                                entity.setPos(target.getX() + x,
-                                        target.getY() + y + spawnHeight,
-                                        target.getZ() + z
+                                entity.setPos(target.x + x,
+                                        target.y + y + spawnHeight,
+                                        target.z + z
                                 );
                                 serverLevel.addFreshEntity(entity);
                             } else {

@@ -21,6 +21,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class TNTSlowBarrageWand {
 	static int tntAmountPerTick = 4;
@@ -67,20 +68,17 @@ public class TNTSlowBarrageWand {
 			Vec3 playerEyeStart = player.getEyePosition(0);
 			Vec3 playerLookAngle = player.getLookAngle();
 			Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlocks));
+			Vec3 dir = new Vec3(0, 0, 0);
 			//Makes a duplicate, unused CustomTnt so we're able to get entityHitResult working without
 			//potentially having to rewrite much of the code
 			CustomTnt customTnt1 = ModEntities.CUSTOM_TNT.create(level);
             assert customTnt1 != null;
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-					level,
-					customTnt1,
+			EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
 					playerEyeStart,
 					playerEyeEnd,
-					player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
-					entity -> entity instanceof Entity
-					&& entity.isAlive()
-					&& !entity.removed
-					&& entity != player);
+					player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
+					Predicate.isEqual(playerLookAngle),
+					0);
 			final BlockHitResult blockHitResult = level.clip(new ClipContext(
 					playerEyeStart,
 					playerEyeEnd,
@@ -88,11 +86,11 @@ public class TNTSlowBarrageWand {
 					ClipContext.Fluid.NONE,
 					player
 			));
-			BlockPos target;
+			Vec3 target;
 			if(entityHitResult != null) {
-				target = entityHitResult.getEntity().blockPosition();
+				target = entityHitResult.getEntity().position();
 			} else {
-                target = blockHitResult.getBlockPos();
+                target = blockHitResult.getLocation();
             }
             final double[] changePosition = initialPos; //Initial position of the starting TNT
 				for (int i = 0; i < tntAmount; i++) {
@@ -105,14 +103,14 @@ public class TNTSlowBarrageWand {
 						CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
 						if(customTnt != null) {
 							//X dir: cos, Z dir: sin, makes a circle
-                            customTnt.setPos(target.getX() + (Math.cos(angle[defaultValues]) * amplitude),
-                                    target.getY() + spawnHeight[defaultValues],
-                                    target.getZ() + (Math.sin(angle[defaultValues]) * amplitude));
+                            customTnt.setPos(target.x + (Math.cos(angle[defaultValues]) * amplitude),
+                                    target.y + spawnHeight[defaultValues],
+                                    target.z + (Math.sin(angle[defaultValues]) * amplitude));
                             customTnt.setFuse(tntFuseTimer);
 							//Performance improvement: Spawns a particle effect on each TNT that satisfy the modulus criteria instead of on each TNT
 							if ((finalI % moduloParticle) == moduloRest) {
 								//Particles only spawn 32 blocks away from the player. Might bypass in future
-								serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, customTnt.getX(), customTnt.getY(), customTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
+								serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, customTnt.getX(), customTnt.getY(), customTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
 							}
 							customTnt.setExplosionPower(explosionPower);
 							customTnt.setExplodeOnContact(explodeOnContact);
@@ -127,10 +125,10 @@ public class TNTSlowBarrageWand {
 							if(finalI1 == 0) {
                                 //Makes the sound play as close to the y direction the player is at
                                 level.playSound(null,
-                                        target.getX(),
+                                        target.x,
                                         //Makes the sound play as close to the y direction the player is at
-                                        target.getY() + spawnHeightSound[defaultValues],
-                                        target.getZ(),
+                                        target.y + spawnHeightSound[defaultValues],
+                                        target.z,
                                         SoundEvents.TNT_PRIMED,
                                         SoundSource.PLAYERS,
                                         volume, pitch);

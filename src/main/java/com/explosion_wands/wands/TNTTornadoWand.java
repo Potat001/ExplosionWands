@@ -39,7 +39,7 @@ public class TNTTornadoWand extends Item {
         boolean killEntitiesAfterLoop = false;
         double yIncrement = 0.5;
         int velocity = 10;
-        BlockHitResult blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
+        BlockHitResult blockHitResult = (BlockHitResult) getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         double dirX = player.getX();
         double dirY = player.getY();
         double dirZ = player.getZ();
@@ -54,11 +54,11 @@ public class TNTTornadoWand extends Item {
             if(blockHitResult.getType() != HitResult.Type.BLOCK) {
                 Vec3 customTntInAirPosition = player.position().add(addedXDir, addedYDir, addedZDir)
                         .add(playerLookDir.scale(scale));
-                customTnt.moveTo(customTntInAirPosition);
+                customTnt.moveTo(customTntInAirPosition.x, customTntInAirPosition.y, customTntInAirPosition.z, 0, 0);
             } else {
                 //Does not work if it's at the very corner of a block, but it's more than good enough
                 Vec3 customTntInAirPosition = blockHitResult.getLocation();
-                customTnt.moveTo(customTntInAirPosition);
+                customTnt.moveTo(customTntInAirPosition.x, customTntInAirPosition.y, customTntInAirPosition.z, 0, 0);
             }
             customTnt.setDeltaMovement(playerLookDir.scale(velocity));
             customTnt.setTornado(tornado);

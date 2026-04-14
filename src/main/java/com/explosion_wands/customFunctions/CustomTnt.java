@@ -123,7 +123,7 @@ public class CustomTnt extends PrimedTnt {
                     Explosion.BlockInteraction.DESTROY
             );
             if(entityToSpawn == null) {
-                serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(), getY(), getZ(), 700, 3, 3, 3, 0.2);
+                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, getX(), getY(), getZ(), 700, 3, 3, 3, 0.2);
             }
             if(!discardTNT) {
                 serverLevel.sendParticles(ParticleTypes.FLAME, getX(), getY() - 1, getZ(), 700, 1.5, 1.5, 1.5, 0.1);
@@ -174,7 +174,7 @@ public class CustomTnt extends PrimedTnt {
                             changeZ[0] = zChange;
                             angle[0] += angleStep;
                             changePosition[0] += Math.PI / ((double) (entityAmount / 4) / 2);
-                            server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
+                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
                             //The shape is no longer hardcoded to be a circle, so the player can have
                             //a lot more options for how they want the entity spawn positions to look
                         } else {
@@ -185,7 +185,7 @@ public class CustomTnt extends PrimedTnt {
                             changeX[0] += xChange;
                             changeY[0] += yChange;
                             changeZ[0] += zChange;
-                            server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
+                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
                         }
                         server.addFreshEntity(entity);
                         if(entityToSpawn != EntityType.TNT) {
@@ -197,7 +197,7 @@ public class CustomTnt extends PrimedTnt {
                         entity.setNoGravity(!isTornado);
                         if((finalI % 6) == 1) {
                             //Performance improvement: Spawns a particle effect on each entity that satisfy the modulus criteria instead of on each entity
-                            server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
+                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
                         }
                     }
                 });
@@ -242,7 +242,7 @@ public class CustomTnt extends PrimedTnt {
             }
             if(ticksSinceLastExplosion <= 1 || explosionAmount >= 200) {
                     this.remove();
-                serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(), getY() + 2, getZ(), 2000, 4, 4, 4, 0.1);
+                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, getX(), getY() + 2, getZ(), 2000, 4, 4, 4, 0.1);
             }
             //Debugging
             //System.out.println("Last explosion tick: " + ticksSinceLastExplosion);

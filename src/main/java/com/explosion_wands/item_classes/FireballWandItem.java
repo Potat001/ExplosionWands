@@ -3,6 +3,7 @@ package com.explosion_wands.item_classes;
 import com.explosion_wands.wands.FireballWand;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
@@ -20,7 +21,7 @@ public class FireballWandItem extends Item {
         ItemStack itemStack = player.getItemInHand(hand);
         if (!level.isClientSide()) {
             Projectile projectile = FireballWand.asFireballProjectile(level, player);
-            level.addFreshEntity(projectile);
+            level.addFreshEntity((Entity) projectile);
         }
         return InteractionResultHolder.success(itemStack);
     }

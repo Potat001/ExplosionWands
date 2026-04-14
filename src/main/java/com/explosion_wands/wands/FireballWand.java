@@ -21,7 +21,7 @@ public class FireballWand extends Item {
     public static Projectile asFireballProjectile(Level level, Player player) {
         float volume = 0.4F;
         float pitch = 1.0F;
-        BlockHitResult blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
+        BlockHitResult blockHitResult = (BlockHitResult) getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         int explosionPowerAir = 50;
         //Fireball's velocity
         //Seems to lag noticeably more in this version when a lot of wands have been used a lot, but we still keep it at
@@ -50,12 +50,12 @@ public class FireballWand extends Item {
                 Vec3 fireballInAirPosition = player.position().add(addedXDir, addedYDir, addedZDir)
                         .add(playerLookDir.scale(scale));
                 //Sets the fireball's position
-                fireballAir.moveTo(fireballInAirPosition);
+                fireballAir.moveTo(fireballInAirPosition.x, fireballInAirPosition.y, fireballInAirPosition.z, 0, 0);
             } else {
                 //Does not work if it's at the very corner of a block, but it's more than good enough
                 Vec3 fireballInAirPosition = blockHitResult.getLocation();
                 //Sets the fireball's position
-                fireballAir.moveTo(fireballInAirPosition);
+                fireballAir.moveTo(fireballInAirPosition.x, fireballInAirPosition.y, fireballInAirPosition.z, 0, 0);
             }
             //Set's the fireball's velocity
             fireballAir.setDeltaMovement(playerLookDir.scale(velocity));
@@ -64,6 +64,6 @@ public class FireballWand extends Item {
             server.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, volume, pitch);
         }
-        return fireballAir;
+        return (Projectile) fireballAir;
     }
 }

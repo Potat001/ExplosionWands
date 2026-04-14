@@ -19,7 +19,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class TNTInstantBarrageWand {
 
@@ -55,18 +57,15 @@ public class TNTInstantBarrageWand {
             Vec3 playerEyeStart = player.getEyePosition(0);
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlocks));
+            Vec3 dir = new Vec3(0, 0, 0);
             CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
             assert customTnt != null;
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                    level,
-                    customTnt,
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
-                    player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
-                    entity -> entity instanceof Entity
-                    && entity.isAlive()
-                    && !entity.removed
-                    && entity != player);
+                    player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
+                    Predicate.isEqual(playerLookAngle),
+                    0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -74,9 +73,9 @@ public class TNTInstantBarrageWand {
                     ClipContext.Fluid.NONE,
                     player
             ));
-            BlockPos target = blockHitResult.getBlockPos();
+            Vec3 target = blockHitResult.getLocation();
             if(entityHitResult != null) {
-                target = entityHitResult.getEntity().blockPosition();
+                target = entityHitResult.getEntity().position();
             }
             final double[] changePosition = {initialPos}; //Initial position of the starting TNT
             for (int i = 0; i < tntAmount; i++) {
@@ -84,13 +83,13 @@ public class TNTInstantBarrageWand {
                 customTnt = ModEntities.CUSTOM_TNT.create(level);
                 //X dir: cos, Z dir: sin, makes a circle
                 if (customTnt != null) {
-                    customTnt.setPos(target.getX() + (Math.cos(angle[angleValue]) * amplitude),
-                            target.getY() + spawnHeight,
-                            target.getZ() + (Math.sin(angle[angleValue]) * amplitude));
+                    customTnt.setPos(target.x + (Math.cos(angle[angleValue]) * amplitude),
+                            target.y + spawnHeight,
+                            target.z + (Math.sin(angle[angleValue]) * amplitude));
                     customTnt.setFuse(fuse);
                     if ((i % moduloParticle) == moduloRest) {
                         //Particles only spawn 32 blocks away from the player. Might bypass in future
-                        serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, customTnt.getX(), customTnt.getY(), customTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
+                        serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, customTnt.getX(), customTnt.getY(), customTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
                     }
                     customTnt.setExplosionPower(explosionPower);
                     customTnt.setExplodeOnContact(explodeOnContact);
@@ -103,9 +102,9 @@ public class TNTInstantBarrageWand {
                 }
             }
             level.playSound(null,
-                    target.getX(),
-                    target.getY() + spawnHeightSound,
-                    target.getZ(),
+                    target.x,
+                    target.y + spawnHeightSound,
+                    target.z,
                     SoundEvents.TNT_PRIMED,
                     SoundSource.PLAYERS,
                     volume,

@@ -7,6 +7,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -15,9 +17,12 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 public class FireballBarrageWand {
     private static final List<Runnable> QUEUE = new ArrayList<>();
@@ -61,18 +66,12 @@ public class FireballBarrageWand {
                     zDir
             );
             largeFireball.explosionPower = explosionPower;
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                    level,
-                    largeFireball,
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
                     player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
-                    //Makes it so that we can hit any type of entity
-                    entity -> entity instanceof Entity
-                    //Ensures that we can't hit the hitbox of dead entities
-                    && entity.isAlive()
-                    && !entity.removed
-                    && entity != player);
+                    Predicate.isEqual(playerLookAngle),
+                    0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -80,9 +79,9 @@ public class FireballBarrageWand {
                     ClipContext.Fluid.NONE,
                     player
             ));
-            BlockPos target = blockHitResult.getBlockPos();
+            Vec3 target = blockHitResult.getLocation();
             if(entityHitResult != null) {
-                target = entityHitResult.getEntity().blockPosition();
+                target = entityHitResult.getEntity().position();
             }
             for (int i = 0; i < fireballAmount; i++) {
                 largeFireball = new LargeFireball(
@@ -94,9 +93,9 @@ public class FireballBarrageWand {
                 );
                 largeFireball.explosionPower = explosionPower;
                 largeFireball.setPos(
-                        target.getX() + (Math.cos(angle) * amplitude),
-                        target.getY() + spawnHeight,
-                        target.getZ() + (Math.sin(angle) * amplitude)
+                        target.x + (Math.cos(angle) * amplitude),
+                        target.y + spawnHeight,
+                        target.z + (Math.sin(angle) * amplitude)
                 );
                 largeFireball.setDeltaMovement(xDir, yDir, zDir);
                 largeFireball.addTag("fireball");
@@ -104,9 +103,9 @@ public class FireballBarrageWand {
                 angle += angleStep;
             }
                 serverLevel.playSound(null,
-                        target.getX(),
-                        target.getY() + spawnHeightSound,
-                        target.getZ(),
+                        target.x,
+                        target.y + spawnHeightSound,
+                        target.z,
                         SoundEvents.FIRECHARGE_USE,
                         SoundSource.PLAYERS,
                         volume,

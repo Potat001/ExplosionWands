@@ -17,7 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class TNTFallingWand {
 
@@ -53,6 +56,7 @@ public class TNTFallingWand {
             double y = ExplosionEntities.y;
             double z = ExplosionEntities.z;
             double r = 1.5;
+            Vec3 dir = new Vec3(0, 0, 0);
             int spawnHeight = ExplosionEntities.spawnHeight;
             int reachEntities = ExplosionEntities.reachEntities;
             int reachBlock = ExplosionEntities.reachBlock;
@@ -62,16 +66,12 @@ public class TNTFallingWand {
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
             CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
             assert customTnt != null;
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                    level,
-                    customTnt,
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
-                    player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
-                    entity -> entity instanceof Entity
-                    && entity.isAlive()
-                    && !entity.removed
-                    && entity != player);
+                    player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
+                    Predicate.isEqual(playerLookAngle),
+                    0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -79,9 +79,9 @@ public class TNTFallingWand {
                     ClipContext.Fluid.NONE,
                     player
             ));
-            BlockPos target = blockHitResult.getBlockPos();
+            Vec3 target = blockHitResult.getLocation();
             if(entityHitResult != null) {
-                target = entityHitResult.getEntity().blockPosition();
+                target = entityHitResult.getEntity().position();
             }
             //Failsafe in-case we spawn more entities than is intended
             if(spawnedEntities <= maxEntities) {
@@ -92,9 +92,9 @@ public class TNTFallingWand {
                         CustomTnt customTnt2 = ModEntities.CUSTOM_TNT.create(level);
                         //This does not make a perfect circle, but it should not be noticeable
                             if (increment <= randomExplosion && customTnt != null) {
-                                customTnt.setPos(target.getX(),
-                                        target.getY() + spawnHeight,
-                                        target.getZ()
+                                customTnt.setPos(target.x,
+                                        target.y + spawnHeight,
+                                        target.z
                                 );
                                 customTnt.setFuse(fuse);
                                 customTnt.setExplosionPower(randomIncrement);
@@ -102,9 +102,9 @@ public class TNTFallingWand {
                             }
                         if (customTnt2 != null) {
                             if (x != 0 && y != 0 && z != 0) {
-                                customTnt2.setPos(target.getX() + x,
-                                        target.getY() + y + spawnHeight,
-                                        target.getZ() + z
+                                customTnt2.setPos(target.x + x,
+                                        target.y + y + spawnHeight,
+                                        target.z + z
                                 );
                                 customTnt2.setFuse(secondFuse);
                                 customTnt2.setExplodeOnContact(explodeOnContact);
@@ -112,7 +112,7 @@ public class TNTFallingWand {
                                 serverLevel.addFreshEntity(customTnt2);
                                 if ((increment % moduloParticle) == moduloRest) {
                                     //Particles only spawn 32 blocks away from the player. Might bypass in future
-                                    serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, customTnt2.getX(), customTnt2.getY(), customTnt2.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
+                                    serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, customTnt2.getX(), customTnt2.getY(), customTnt2.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
                                 }
                             } else {
                                 customTnt2.remove();

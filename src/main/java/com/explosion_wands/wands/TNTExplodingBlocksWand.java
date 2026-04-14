@@ -19,7 +19,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class TNTExplodingBlocksWand {
 
@@ -53,6 +56,7 @@ public class TNTExplodingBlocksWand {
             double y = ExplosionEntities.y;
             double z = ExplosionEntities.z;
             double r = ExplosionEntities.r;
+            Vec3 dir = new Vec3(0, 0, 0);
             int spawnHeight = ExplosionEntities.spawnHeight;
             int reachEntities = ExplosionEntities.reachEntities;
             int reachBlock = ExplosionEntities.reachBlock;
@@ -62,16 +66,12 @@ public class TNTExplodingBlocksWand {
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
             CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
             assert customTnt != null;
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                    level,
-                    customTnt,
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
-                    player.getBoundingBox().expandTowards(playerLookAngle.scale(reachEntities)).inflate(inflate),
-                    entity -> entity instanceof Entity
-                            && entity.isAlive()
-                            && !entity.removed
-                            && entity != player);
+                    player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
+                    Predicate.isEqual(playerLookAngle),
+                    0);
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -85,17 +85,17 @@ public class TNTExplodingBlocksWand {
              * on from getting deleted, which means that it will instead spawn inside where
              * the TNTs spawn
              */
-            BlockPos target = blockHitResult.getBlockPos().offset(x, spawnHeight, 0);
+            Vec3 target = blockHitResult.getLocation().add(0, spawnHeight, 0);
             if (entityHitResult != null) {
-                target = entityHitResult.getEntity().blockPosition().offset(0, spawnHeight, 0);
+                target = entityHitResult.getEntity().position().add(0, spawnHeight, 0);
             }
             BlockState blockToSpawn = Blocks.DIAMOND_BLOCK.defaultBlockState();
             //Purely for debugging purposes
             String blockType = "";
             FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(level,
-                    target.getX(),
-                    target.getY(),
-                    target.getZ(),
+                    target.x,
+                    target.y,
+                    target.z,
                     blockToSpawn
             );
             //Failsafe in-case we spawn more entities than is intended
@@ -138,9 +138,9 @@ public class TNTExplodingBlocksWand {
                         customTnt = ModEntities.CUSTOM_TNT.create(level);
                         //This does not make a perfect circle, but it should not be noticeable
                         if (increment <= randomExplosion && customTnt != null) {
-                            customTnt.setPos(target.getX(),
-                                    target.getY(),
-                                    target.getZ()
+                            customTnt.setPos(target.x,
+                                    target.y,
+                                    target.z
                             );
                             serverLevel.addFreshEntity(customTnt);
                             customTnt.setFuse(fuse);
@@ -151,9 +151,9 @@ public class TNTExplodingBlocksWand {
                         if(x != 0 && y != 0 && z != 0) {
                             fallingBlockEntity = new FallingBlockEntity(
                                     level,
-                                    target.getX() + x,
-                                    target.getY() + y,
-                                    target.getZ() + z,
+                                    target.x + x,
+                                    target.y + y,
+                                    target.z + z,
                                     blockToSpawn
                             );
                             //Prevents the falling block entity from disappearing on the next tick

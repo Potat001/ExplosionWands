@@ -1,5 +1,6 @@
 package com.explosion_wands.wands;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,7 +21,7 @@ public class FireballShotgunWand extends Item {
 
     public static Projectile asFireballProjectile(Level level, Player player) {
         if(level instanceof ServerLevel server) {
-        BlockHitResult blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
+        BlockHitResult blockHitResult = (BlockHitResult) getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         float volume = 0.8F;
         float pitch = 1.0F;
         double incremented = 2;
@@ -60,7 +61,7 @@ public class FireballShotgunWand extends Item {
                             .add(playerStartDirRight.scale((playerStartDirRightScale))) //left/right
                             .add(directlyUp.scale(directlyUpScale)); //up/down
                     //Sets the fireball's position
-                    fireballAir.moveTo(fireballInAirPosition);
+                    fireballAir.moveTo(fireballInAirPosition.x, fireballInAirPosition.y, fireballInAirPosition.z, 0, 0);
             }
             if(blockHitResult.getType() == HitResult.Type.BLOCK) {
                     Vec3 fireballInAirPosition = blockHitResult.getLocation() //in front
@@ -68,7 +69,7 @@ public class FireballShotgunWand extends Item {
                             .add(playerStartDirRight.scale((playerStartDirRightScale))) //left/right
                             .add(playerStartDirRightBlockHitX, playerStartDirRightBlockHitY, playerStartDirRightBlockHitZ); //up/down
                     //Sets the fireball's position
-                    fireballAir.moveTo(fireballInAirPosition);
+                    fireballAir.moveTo(fireballInAirPosition.x, fireballInAirPosition.y, fireballInAirPosition.z, 0, 0);
             }
             //Set's the fireball's velocity
             fireballAir.setDeltaMovement(playerStartDirForward.scale(velocity));

@@ -19,7 +19,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class FireballHitscanWand extends Item {
     public FireballHitscanWand(Properties properties) {
@@ -69,18 +72,13 @@ public class FireballHitscanWand extends Item {
                 dirZ);
         fireballAir.explosionPower = explosionPowerAir;
         //Target entity
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                level,
-                fireballAir,
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                 playerStartDir,
                 playerEndDirEntities,
                 player.getBoundingBox().expandTowards(playerLookDir.scale(reachEntities)).inflate(inflate),
-                //Makes it so that we can hit any type of entity
-                entity -> entity instanceof Entity
-                //Ensures that we can't hit the hitbox of dead entities
-                && entity.isAlive()
-                && !entity.removed
-                && entity != player);
+                Predicate.isEqual(playerLookDir),
+                0);
+
         BlockHitResult blockHitResultEntities = level.clip(new ClipContext(
                 playerStartDir,
                 playerEndDirEntities,
@@ -107,7 +105,7 @@ public class FireballHitscanWand extends Item {
                         //Changes the fireball's position to the position of the entity we clicked on
                         Vec3 fireballOnEntityPosition = targetEntity.position();
                         //Teleports the fireball into the entity
-                        fireballAir.moveTo(fireballOnEntityPosition);
+                        fireballAir.moveTo(fireballOnEntityPosition.x, fireballOnEntityPosition.y, fireballOnEntityPosition.z, 0, 0);
                         //Filters out entities by if they're living (mobs) or non-living, like
                         //falling blocks and boats
                         if(entityHitResult.getEntity() instanceof LivingEntity) {
