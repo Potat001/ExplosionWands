@@ -1,26 +1,20 @@
 package com.explosion_wands.wands;
 
-import com.explosion_wands.customFunctions.CustomTnt;
-import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Objects;
 import java.util.Random;
-import java.util.function.Predicate;
 
 public class FireballScatterWand {
 
@@ -52,7 +46,7 @@ public class FireballScatterWand {
             Vec3 dir = new Vec3(0, 0, 0);
             r = 8;
             int spawnHeight;
-            spawnHeight = 17;
+            spawnHeight = 15;
             float explosionPower = 0F;
             int reachEntities = ExplosionEntities.reachEntities;
             int reachBlock = ExplosionEntities.reachBlock;
@@ -75,16 +69,20 @@ public class FireballScatterWand {
                     ClipContext.Fluid.NONE,
                     player
             ));
+            /*
             EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
                     player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
                     Predicate.isEqual(playerLookAngle),
                     0);
+             */
             Vec3 target = blockHitResult.getLocation();
+            /*
             if (entityHitResult != null) {
                 target = entityHitResult.getEntity().position();
             }
+             */
             //Failsafe in-case we spawn more entities than is intended
             if (spawnedEntities <= maxEntities) {
                 for (double theta = ExplosionEntities.theta; theta <= lessThanTheta; theta += incrementTheta) {
@@ -97,22 +95,21 @@ public class FireballScatterWand {
                                 playerLookAngle.z()
                         );
                         fireball.explosionPower = fireballExplosionPower;
-                        CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
+                        PrimedTnt primedTnt = new PrimedTnt(EntityType.TNT, level);
                         //This does not make a perfect circle, but it should not be noticeable
-                        if (increment <= randomExplosion && customTnt != null) {
-                            customTnt.setPos(target.x,
+                        if (increment <= randomExplosion) {
+                            primedTnt.setPos(target.x,
                                     target.y + spawnHeight,
                                     target.z
                             );
-                            serverLevel.addFreshEntity(customTnt);
-                            customTnt.setFuse(fuse);
-                            customTnt.setExplosionPower(explosionPower);
+                            serverLevel.addFreshEntity(primedTnt);
+                            primedTnt.setFuse(fuse);
                         }
                         //Creates fireball every iteration
                         //X dir: cos, Z dir: sin, makes a circle
                         if (x != 0 && y != 0 && z != 0) {
                             fireball.setPos(target.x + x,
-                                    target.x - y + spawnHeight,
+                                    target.y + spawnHeight,
                                     target.z - z
                             );
                             fireball.addTag("fireball");

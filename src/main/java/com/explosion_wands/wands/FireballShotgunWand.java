@@ -1,6 +1,5 @@
 package com.explosion_wands.wands;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,7 +28,7 @@ public class FireballShotgunWand extends Item {
         double fireballAmount = 50;
         int explosionPowerAir = 9;
         //fireball's velocity
-        double velocity = 3;
+        double velocity = 5;
         double dirX = player.getX();
         double dirY = player.getY();
         double dirZ = player.getZ();
@@ -45,7 +44,8 @@ public class FireballShotgunWand extends Item {
         playerStartDirForward.add(dirX, dirY, dirZ).normalize();
         Vec3 playerStartDirRight = playerStartDirForward.cross(playerUpDir).normalize();
         for(int i = 0; i < fireballAmount; i++) {
-            double playerStartDirRightScale = incremented * (fireballAmount / 2) - (changePos + incremented / 2);
+            //Doubles changePos to spread the fireballs further apart, since the fireballs seem to move around randomly
+            double playerStartDirRightScale = incremented * (fireballAmount / 2) - (changePos * 2 + incremented / 2);
             LargeFireball fireballAir = new LargeFireball(
                     level,
                     player,

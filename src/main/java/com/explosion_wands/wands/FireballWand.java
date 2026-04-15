@@ -27,6 +27,8 @@ public class FireballWand extends Item {
         //Seems to lag noticeably more in this version when a lot of wands have been used a lot, but we still keep it at
         //5, since it should only be noticeable when there's a lot going on, which will make it lag regardless
         //Makes the explosion power slightly higher to compensate
+        //This and below versions also makes the fireball not fly in a straight line no matter what, but keeps it at
+        //5 since it's somewhat more controllable then
         int velocity = 5;
         double scale = 2.5;
         double addedXDir = 0;
@@ -63,7 +65,8 @@ public class FireballWand extends Item {
             //Spawns the fireball
             server.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, volume, pitch);
+            server.addFreshEntity(fireballAir);
         }
-        return (Projectile) fireballAir;
+        return null;
     }
 }

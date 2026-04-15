@@ -49,11 +49,13 @@ public class ModItems {
                                     .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT CHICKEN WAND (previously TNT STICK AIR)
+    /*
     public static final Item TNT_CHICKEN_WAND =
             register("tnt_chicken_wand",
                     new TNTChickenWandItem(
                             new Item.Properties()
                                     .stacksTo(stackSize).tab(creativeModeTab)));
+     */
 
     //TNT EXPLODING BLOCKS WAND (previously TNT STICK FALLING BLOCK)
     public static final Item TNT_EXPLODING_BLOCKS_WAND =
@@ -77,11 +79,13 @@ public class ModItems {
                                     .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT DRILL WAND (previously TNT STICK UNBOUND AIR and TNT INFINITE WAND)
+    /*
     public static final Item TNT_DRILL_WAND =
             register("tnt_drill_wand",
                     new TNTDrillWandItem(
                             new Item.Properties()
                                     .stacksTo(stackSize).tab(creativeModeTab)));
+     */
 
     //TNT INSTANT BARRAGE WAND (previously TNT STICK UNBOUND BLOCK)
     public static final Item TNT_INSTANT_BARRAGE_WAND =
@@ -98,11 +102,14 @@ public class ModItems {
                                     .stacksTo(stackSize).tab(creativeModeTab)));
 
     //TNT TORNADO WAND (previously TNT STICK MID AIR)
+    /*
     public static final Item TNT_TORNADO_WAND =
             register("tnt_tornado_wand",
                     new TNTTornadoWandItem(
                             new Item.Properties()
                                     .stacksTo(stackSize).tab(creativeModeTab)));
+     */
+
 //HELPER METHOD
     //Registering the item
     private static Item register(String name, Item item) {

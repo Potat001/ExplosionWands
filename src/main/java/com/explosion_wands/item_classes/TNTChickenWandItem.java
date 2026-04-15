@@ -14,7 +14,7 @@ public class TNTChickenWandItem extends Item {
     public TNTChickenWandItem(Item.Properties properties) {
         super(properties);
     }
-
+    /*
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
@@ -26,4 +26,5 @@ public class TNTChickenWandItem extends Item {
         }
         return InteractionResultHolder.success(itemStack);
     }
+     */
 }

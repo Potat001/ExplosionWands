@@ -1,26 +1,20 @@
 package com.explosion_wands.wands;
 
-import com.explosion_wands.customFunctions.CustomTnt;
-import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Objects;
 import java.util.Random;
-import java.util.function.Predicate;
 
 public class TNTFallingWand {
 
@@ -32,7 +26,8 @@ public class TNTFallingWand {
             int spawnedEntities = ExplosionEntities.spawnedEntities;
             float minExplosion = 1F;
             float maxExplosion = 2F;
-            int secondFuse = 200;
+            int minSecondFuse = 20;
+            int maxSecondFuse = 100;
             boolean explodeOnContact = true;
             float explosionPower = 10.0F;
             int particleThickness = 700;
@@ -44,6 +39,7 @@ public class TNTFallingWand {
             Random random = new Random();
             float randomExplosion = (minExplosion + random.nextFloat() * (maxExplosion - minExplosion));
             int randomIncrement = minIncrement + random.nextInt(maxIncrement - minIncrement);
+            int randomSecondFuse = minSecondFuse + random.nextInt(maxSecondFuse - minSecondFuse);
             double min = 1.0;
             double max = 4.0;
             double randomDistr = min + random.nextDouble() * (max - min);
@@ -64,14 +60,16 @@ public class TNTFallingWand {
             Vec3 playerEyeStart = player.getEyePosition(0);
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
-            CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
-            assert customTnt != null;
+            PrimedTnt primedTnt1 = new PrimedTnt(EntityType.TNT, level);
+            PrimedTnt primedTnt2 = new PrimedTnt(EntityType.TNT, level);
+            /*
             EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
                     player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
                     Predicate.isEqual(playerLookAngle),
                     0);
+             */
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -80,48 +78,45 @@ public class TNTFallingWand {
                     player
             ));
             Vec3 target = blockHitResult.getLocation();
+            /*
             if(entityHitResult != null) {
                 target = entityHitResult.getEntity().position();
             }
+             */
             //Failsafe in-case we spawn more entities than is intended
             if(spawnedEntities <= maxEntities) {
                 for (double theta = ExplosionEntities.theta; theta <= lessThanTheta; theta += incrementTheta) {
                     for (double phi = ExplosionEntities.phi; phi <= lessThanPhi; phi += incrementPhi) {
                         //Adds the entities to the world
-                        customTnt = ModEntities.CUSTOM_TNT.create(level);
-                        CustomTnt customTnt2 = ModEntities.CUSTOM_TNT.create(level);
+                        primedTnt1 = new PrimedTnt(EntityType.TNT, level);
+                        primedTnt2 = new PrimedTnt(EntityType.TNT, level);
                         //This does not make a perfect circle, but it should not be noticeable
-                            if (increment <= randomExplosion && customTnt != null) {
-                                customTnt.setPos(target.x,
+                            if (increment <= randomExplosion) {
+                                primedTnt1.setPos(target.x,
                                         target.y + spawnHeight,
                                         target.z
                                 );
-                                customTnt.setFuse(fuse);
-                                customTnt.setExplosionPower(randomIncrement);
-                                serverLevel.addFreshEntity(customTnt);
+                                primedTnt1.setFuse(fuse);
+                                serverLevel.addFreshEntity(primedTnt1);
                             }
-                        if (customTnt2 != null) {
-                            if (x != 0 && y != 0 && z != 0) {
-                                customTnt2.setPos(target.x + x,
-                                        target.y + y + spawnHeight,
-                                        target.z + z
-                                );
-                                customTnt2.setFuse(secondFuse);
-                                customTnt2.setExplodeOnContact(explodeOnContact);
-                                customTnt2.setExplosionPower(explosionPower);
-                                serverLevel.addFreshEntity(customTnt2);
-                                if ((increment % moduloParticle) == moduloRest) {
-                                    //Particles only spawn 32 blocks away from the player. Might bypass in future
-                                    serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, customTnt2.getX(), customTnt2.getY(), customTnt2.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
-                                }
-                            } else {
-                                customTnt2.remove();
+                        if (x != 0 && y != 0 && z != 0) {
+                            primedTnt2.setPos(target.x + x,
+                                    target.y + y + spawnHeight,
+                                    target.z + z
+                            );
+                            primedTnt2.setFuse(randomSecondFuse);
+                            serverLevel.addFreshEntity(primedTnt2);
+                            if ((increment % moduloParticle) == moduloRest) {
+                                //Particles only spawn 32 blocks away from the player. Might bypass in future
+                                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, primedTnt2.getX(), primedTnt2.getY(), primedTnt2.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
                             }
-                            x = r * Math.sin(theta) * Math.cos(phi);
-                            y = r * Math.cos(theta);
-                            z = r * Math.sin(theta) * Math.sin(phi);
-                            increment++;
+                        } else {
+                            primedTnt2.remove();
                         }
+                        x = r * Math.sin(theta) * Math.cos(phi);
+                        y = r * Math.cos(theta);
+                        z = r * Math.sin(theta) * Math.sin(phi);
+                        increment++;
                     }
                 }
                 //Debugging

@@ -1,28 +1,21 @@
 package com.explosion_wands.wands;
 
-import com.explosion_wands.customFunctions.CustomTnt;
-import com.explosion_wands.entity.ModEntities;
 import com.explosion_wands.sharedValues.ExplosionEntities;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.Objects;
 import java.util.Random;
-import java.util.function.Predicate;
 
 public class TNTExplodingBlocksWand {
 
@@ -33,9 +26,9 @@ public class TNTExplodingBlocksWand {
             int fuse = ExplosionEntities.fuse;
             int spawnedEntities = ExplosionEntities.spawnedEntities;
             float minExplosion;
-            minExplosion = 1.0F;
+            minExplosion = 3.0F;
             float maxExplosion;
-            maxExplosion = 4F;
+            maxExplosion = 6.0F;
             int minIncrement = ExplosionEntities.minIncrement;
             int maxIncrement = ExplosionEntities.maxIncrement;
             int minRandomEntities = ExplosionEntities.minRandomEntity;
@@ -64,14 +57,14 @@ public class TNTExplodingBlocksWand {
             Vec3 playerEyeStart = player.getEyePosition(0);
             Vec3 playerLookAngle = player.getLookAngle();
             Vec3 playerEyeEnd = playerEyeStart.add(playerLookAngle.scale(reachBlock));
-            CustomTnt customTnt = ModEntities.CUSTOM_TNT.create(level);
-            assert customTnt != null;
+            /*
             EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(Objects.requireNonNull(level.getEntity(0)),
                     playerEyeStart,
                     playerEyeEnd,
                     player.getBoundingBox().expandTowards(dir.scale(reachEntities)).inflate(inflate),
                     Predicate.isEqual(playerLookAngle),
                     0);
+             */
             BlockHitResult blockHitResult = level.clip(new ClipContext(
                     playerEyeStart,
                     playerEyeEnd,
@@ -86,9 +79,11 @@ public class TNTExplodingBlocksWand {
              * the TNTs spawn
              */
             Vec3 target = blockHitResult.getLocation().add(0, spawnHeight, 0);
+            /*
             if (entityHitResult != null) {
                 target = entityHitResult.getEntity().position().add(0, spawnHeight, 0);
             }
+             */
             BlockState blockToSpawn = Blocks.DIAMOND_BLOCK.defaultBlockState();
             //Purely for debugging purposes
             String blockType = "";
@@ -135,16 +130,15 @@ public class TNTExplodingBlocksWand {
                             blockToSpawn = Blocks.GLOWSTONE.defaultBlockState();
                             blockType = blockToSpawn.toString();
                         }
-                        customTnt = ModEntities.CUSTOM_TNT.create(level);
+                        PrimedTnt primedTnt = new PrimedTnt(EntityType.TNT, level);
                         //This does not make a perfect circle, but it should not be noticeable
-                        if (increment <= randomExplosion && customTnt != null) {
-                            customTnt.setPos(target.x,
+                        if (increment <= randomExplosion) {
+                            primedTnt.setPos(target.x,
                                     target.y,
                                     target.z
                             );
-                            serverLevel.addFreshEntity(customTnt);
-                            customTnt.setFuse(fuse);
-                            customTnt.setExplosionPower(randomIncrement);
+                            serverLevel.addFreshEntity(primedTnt);
+                            primedTnt.setFuse(fuse);
                         }
 
                         //Adds the falling block entity to the world
