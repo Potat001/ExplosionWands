@@ -25,7 +25,7 @@ public class FireballShotgunWand extends Item {
         float pitch = 1.0F;
         double incremented = 2;
         double changePos = 0;
-        double fireballAmount = 50;
+        double fireballAmount = 40;
         int explosionPowerAir = 9;
         //fireball's velocity
         double velocity = 5;

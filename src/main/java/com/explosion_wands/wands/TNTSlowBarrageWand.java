@@ -21,7 +21,7 @@ import java.util.*;
 
 public class TNTSlowBarrageWand {
 	static int tntAmountPerTick = 4;
-	private static final int tntAmount = 100;
+	private static final int tntAmount = 70;
 	private static final List<Runnable> QUEUE = new ArrayList<>();
 	public static void add(Runnable task) {
 		QUEUE.add(task);
@@ -39,7 +39,7 @@ public class TNTSlowBarrageWand {
 			//Since setDefaultGravity is bugged in this version and below,
 			//we change the spawn height so most of them explode the blocks under them
 			//(if they're falling roughly on the same height as the block we clicked on)
-			final double[] spawnHeight = {20};
+			final double[] spawnHeight = {15};
 			final double[] spawnHeightSound = {5};
 			double min = 1.0;
 			double max = 4.0;

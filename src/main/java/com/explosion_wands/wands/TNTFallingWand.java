@@ -27,7 +27,7 @@ public class TNTFallingWand {
             int spawnedEntities = ExplosionEntities.spawnedEntities;
             float minExplosion = 1F;
             float maxExplosion = 2F;
-            int minSecondFuse = 20;
+            int minSecondFuse = 40;
             int maxSecondFuse = 100;
             boolean explodeOnContact = true;
             float explosionPower = 10.0F;
@@ -47,8 +47,10 @@ public class TNTFallingWand {
             int increment = ExplosionEntities.increment;
             double lessThanTheta = ExplosionEntities.lessThanTheta;
             double lessThanPhi = ExplosionEntities.lessThanPhi;
-            double incrementTheta = ExplosionEntities.incrementTheta;
-            double incrementPhi = ExplosionEntities.incrementPhi;
+            double incrementTheta;
+            incrementTheta = 0.6;
+            double incrementPhi;
+            incrementPhi = 0.6;
             double x = ExplosionEntities.x;
             double y = ExplosionEntities.y;
             double z = ExplosionEntities.z;

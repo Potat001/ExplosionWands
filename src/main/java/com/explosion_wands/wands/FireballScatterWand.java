@@ -30,7 +30,7 @@ public class FireballScatterWand {
             double maxRandomPos = ExplosionEntities.maxRandomPos;
             double minRandomPos = ExplosionEntities.minRandomPos;
             double randomPos = (maxRandomPos + random.nextDouble() * (maxRandomPos - minRandomPos));
-            int fireballExplosionPower = 8;
+            int fireballExplosionPower = 7;
             int increment = ExplosionEntities.increment;
             float randomExplosion = 0;
             double lessThanTheta = ExplosionEntities.lessThanTheta;
@@ -44,8 +44,9 @@ public class FireballScatterWand {
             double y = ExplosionEntities.y;
             double z = ExplosionEntities.z;
             double r;
-            Vec3 dir = new Vec3(0, 0, 0);
-            r = 8;
+            //Fireballs move around more randomly, increases the radius, which makes it
+            //more performance friendly and looks a lot cooler as a side-effect
+            r = 20;
             int spawnHeight;
             spawnHeight = 15;
             float explosionPower = 0F;

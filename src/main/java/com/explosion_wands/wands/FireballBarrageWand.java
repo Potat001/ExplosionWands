@@ -33,7 +33,7 @@ public class FireballBarrageWand {
         int spawnHeight = 50;
         int spawnHeightSound = 10;
         double amplitude = 15;
-        int fireballAmount = 40;
+        int fireballAmount = 20;
         int newFireballAmount = fireballAmount / 2;
         int explosionPower = 10;
         //Direction the fireballs will head towards, and the speed of the fireballs

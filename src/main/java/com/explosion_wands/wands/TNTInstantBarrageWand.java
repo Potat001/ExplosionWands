@@ -32,7 +32,7 @@ public class TNTInstantBarrageWand {
             int reachEntities = 128;
             int reachBlocks = 512;
             int inflate = 100;
-            int tntAmount = 80;
+            int tntAmount = 60;
             int moduloParticle = 2;
             int moduloRest = 1;
             int particleThickness = 200;
