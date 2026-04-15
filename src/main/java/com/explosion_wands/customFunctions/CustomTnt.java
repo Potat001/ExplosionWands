@@ -90,14 +90,14 @@ public class CustomTnt extends PrimedTnt {
 
     //Determines if the customTnt has made contact with an entity's bounding box
     protected boolean hitEntity() {
-        double dirX = this.getX();
-        double dirY = this.getY();
-        double dirZ = this.getZ();
+        double dirX = this.x;
+        double dirY = this.y;
+        double dirZ = this.z;
         int reachEntities = 128;
         int inflate = 100;
         Vec3 playerLookDir = this.getLookAngle();
         playerLookDir.add(dirX, dirY, dirZ).normalize();
-        Vec3 customTntPos = new Vec3(getX(), getY(), getZ());
+        Vec3 customTntPos = new Vec3(x, y, z);
         EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                 this,
                 customTntPos,
@@ -113,20 +113,20 @@ public class CustomTnt extends PrimedTnt {
 
     //Responsible for exploding the TNT at its current position
     protected void explode() {
-        if(level instanceof ServerLevel serverLevel && !entitySpawnAfterExplosion) {
+        if(!level.isClientSide && !entitySpawnAfterExplosion) {
             level.explode(
                     this,
-                    getX(),
-                    getY(),
-                    getZ(),
+                    x,
+                    y,
+                    z,
                     explosionPower,
                     Explosion.BlockInteraction.DESTROY
             );
             if(entityToSpawn == null) {
-                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, getX(), getY(), getZ(), 700, 3, 3, 3, 0.2);
+                level.addParticle(ParticleTypes.DRAGON_BREATH, x, y, z, 700, 3, 3);
             }
             if(!discardTNT) {
-                serverLevel.sendParticles(ParticleTypes.FLAME, getX(), getY() - 1, getZ(), 700, 1.5, 1.5, 1.5, 0.1);
+                level.addParticle(ParticleTypes.FLAME, x, y - 1, z, 700, 1.5, 1.5);
             }
             exploded = true;
         }
@@ -162,9 +162,9 @@ public class CustomTnt extends PrimedTnt {
                     if(entity != null) {
                         if(isCircle) {
                                 entity.setPos(
-                                        getX() + changeX[0] + (Math.cos(angle[0]) * amplitude),
-                                        getY() + changeY[0] + incrementY[0],
-                                        getZ() + changeZ[0] + (Math.sin(angle[0]) * amplitude));
+                                        x + changeX[0] + (Math.cos(angle[0]) * amplitude),
+                                        y + changeY[0] + incrementY[0],
+                                        z + changeZ[0] + (Math.sin(angle[0]) * amplitude));
                             //Don't really need the player changing the x and z values for the spawning of entities, since
                             //it offsets the spawn point for the entities. The y value only changes the height of the
                             //spawned entities, so it's useful to have
@@ -174,18 +174,18 @@ public class CustomTnt extends PrimedTnt {
                             changeZ[0] = zChange;
                             angle[0] += angleStep;
                             changePosition[0] += Math.PI / ((double) (entityAmount / 4) / 2);
-                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
+                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.x, entity.y, entity.z, 50, 2, 2, 2, 0.8);
                             //The shape is no longer hardcoded to be a circle, so the player can have
                             //a lot more options for how they want the entity spawn positions to look
                         } else {
                             entity.setPos(
-                                    getX() + changeX[0],
-                                    getY() + changeY[0],
-                                    getZ() + changeZ[0]);
+                                    x + changeX[0],
+                                    y + changeY[0],
+                                    z + changeZ[0]);
                             changeX[0] += xChange;
                             changeY[0] += yChange;
                             changeZ[0] += zChange;
-                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
+                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.x, entity.y, entity.z, 50, 2, 2, 2, 0.8);
                         }
                         server.addFreshEntity(entity);
                         if(entityToSpawn != EntityType.TNT) {
@@ -197,7 +197,7 @@ public class CustomTnt extends PrimedTnt {
                         entity.setNoGravity(!isTornado);
                         if((finalI % 6) == 1) {
                             //Performance improvement: Spawns a particle effect on each entity that satisfy the modulus criteria instead of on each entity
-                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.getX(), entity.getY(), entity.getZ(), 50, 2, 2, 2, 0.8);
+                            server.sendParticles(ParticleTypes.DRAGON_BREATH, entity.x, entity.y, entity.z, 50, 2, 2, 2, 0.8);
                         }
                     }
                 });
@@ -211,7 +211,7 @@ public class CustomTnt extends PrimedTnt {
                             //Currently kills all entities instantly
                             e.kill();
                             if((spawnedEntitiesNumber % 4) == 1) {
-                                server.sendParticles(ParticleTypes.FLAME, e.getX(), e.getY(), e.getZ(), 100, 3, 3, 3, 0.4);
+                                server.sendParticles(ParticleTypes.FLAME, e.x, e.y, e.z, 100, 3, 3, 3, 0.4);
                             }
                             spawnedEntitiesNumber++;
                         }
@@ -242,7 +242,7 @@ public class CustomTnt extends PrimedTnt {
             }
             if(ticksSinceLastExplosion <= 1 || explosionAmount >= 200) {
                     this.remove();
-                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, getX(), getY() + 2, getZ(), 2000, 4, 4, 4, 0.1);
+                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, x, y + 2, z, 2000, 4, 4, 4, 0.1);
             }
             //Debugging
             //System.out.println("Last explosion tick: " + ticksSinceLastExplosion);

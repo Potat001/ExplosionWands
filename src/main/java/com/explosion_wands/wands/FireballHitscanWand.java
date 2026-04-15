@@ -47,9 +47,9 @@ public class FireballHitscanWand extends Item {
         int particleScale = 5;
         int particleThickness = 100;
         int particleSpeed = 2;
-        double dirX = player.getX();
-        double dirY = player.getY();
-        double dirZ = player.getZ();
+        double dirX = player.x;
+        double dirY = player.y;
+        double dirZ = player.z;
         Vec3 playerLookDir = player.getLookAngle();
         Vec3 playerStartDir = player.getEyePosition(0);
         Vec3 playerEndDirEntities = playerStartDir.add(playerLookDir.scale(reachEntities));
@@ -102,7 +102,7 @@ public class FireballHitscanWand extends Item {
                         //Filters out entities by if they're living (mobs) or non-living, like
                         //falling blocks and boats
                             //Evil fake fireball explosion
-                            level.explode(fireballAir, fireballAir.getX(), fireballAir.getY(), fireballAir.getZ(),
+                            level.explode(fireballAir, fireballAir.x, fireballAir.y, fireballAir.z,
                                    explosionPowerOther, Explosion.BlockInteraction.DESTROY);
                         if (level instanceof ServerLevel serverLevel) {
                             //Particles spawn up to 32 blocks away from the player

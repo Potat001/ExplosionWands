@@ -3,6 +3,7 @@ package com.explosion_wands.wands;
 import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -100,8 +101,8 @@ public class TNTExplodingEntitiesWand {
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 2) + (spawnedEntities / 8) && randomEntity > (spawnedEntities / 2)) {
-                            //Armadillos aren't in this version, so we replace them with bees instead
-                            entityToSpawn = EntityType.BEE;
+                            //Armadillos and bees don't exist in this version, so we replace them with magma cubes instead
+                            entityToSpawn = EntityType.MAGMA_CUBE;
                             entityType = entityToSpawn.toString();
                         }
                         if (randomEntity <= (spawnedEntities / 2) + (spawnedEntities / 4) && randomEntity > (spawnedEntities / 2) + (spawnedEntities / 8)) {
@@ -163,6 +164,6 @@ public class TNTExplodingEntitiesWand {
 
             }
         }
-        return InteractionResultHolder.success(itemStack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
     }
 }

@@ -24,7 +24,7 @@ public class TNTTornadoWandItem extends Item {
                 level.addFreshEntity(customTnt);
             }
         }
-        return InteractionResultHolder.success(itemStack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
     }
      */
 }

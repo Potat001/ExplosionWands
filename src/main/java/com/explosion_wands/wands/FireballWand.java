@@ -34,9 +34,9 @@ public class FireballWand extends Item {
         double addedXDir = 0;
         double addedYDir = player.getEyeHeight() - 0.25;
         double addedZDir = 0;
-        double dirX = player.getX();
-        double dirY = player.getY();
-        double dirZ = player.getZ();
+        double dirX = player.x;
+        double dirY = player.y;
+        double dirZ = player.z;
         Vec3 playerLookDir = player.getLookAngle();
         playerLookDir.add(dirX, dirY, dirZ).normalize();
         LargeFireball fireballAir = new LargeFireball(
@@ -63,7 +63,7 @@ public class FireballWand extends Item {
             fireballAir.setDeltaMovement(playerLookDir.scale(velocity));
             fireballAir.addTag("fireball");
             //Spawns the fireball
-            server.playSound(null, player.getX(), player.getY(), player.getZ(),
+            server.playSound(null, player.x, player.y, player.z,
                     SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, volume, pitch);
             server.addFreshEntity(fireballAir);
         }

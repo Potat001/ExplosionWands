@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
@@ -108,6 +109,6 @@ public class FireballBarrageWand {
                         volume,
                         pitch);
         }
-        return InteractionResultHolder.success(itemStack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
     }
 }

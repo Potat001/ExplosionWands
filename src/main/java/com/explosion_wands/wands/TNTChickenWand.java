@@ -24,9 +24,9 @@ public class TNTChickenWand extends Item {
         float pitch = 1.0F;
         int velocity = 10;
         BlockHitResult blockHitResult = (BlockHitResult) getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        double dirX = player.getX();
-        double dirY = player.getY();
-        double dirZ = player.getZ();
+        double dirX = player.x;
+        double dirY = player.y;
+        double dirZ = player.z;
         double scale = 3.0;
         double addedXDir = 0;
         double addedYDir = player.getEyeHeight() - 0.25;
@@ -66,7 +66,7 @@ public class TNTChickenWand extends Item {
                 customTnt.setEntityToSpawn(entityToSpawn);
                 customTnt.setEntityAmount(entityAmount);
                 customTnt.setGradualEntitySpawnAfterExplosion(gradualSpawnAfterExplosion);
-                level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                level.playSound(null, player.x, player.x, player.x,
                 SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
                 return customTnt;
             }

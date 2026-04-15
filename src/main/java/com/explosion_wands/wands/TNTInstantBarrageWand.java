@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -86,7 +87,7 @@ public class TNTInstantBarrageWand {
                 primedTnt.setFuse(fuse);
                 if ((i % moduloParticle) == moduloRest) {
                     //Particles only spawn 32 blocks away from the player. Might bypass in future
-                    serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, primedTnt.getX(), primedTnt.getY(), primedTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
+                    serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, primedTnt.x, primedTnt.y, primedTnt.z, particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
                 }
                 //Adds the primed TNT to the world
                 serverLevel.addFreshEntity(primedTnt);
@@ -104,6 +105,6 @@ public class TNTInstantBarrageWand {
                     volume,
                     pitch);
         }
-        return InteractionResultHolder.success(itemStack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
     }
 }

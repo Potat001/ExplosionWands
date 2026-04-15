@@ -4,6 +4,7 @@ import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -108,7 +109,7 @@ public class TNTFallingWand {
                             serverLevel.addFreshEntity(primedTnt2);
                             if ((increment % moduloParticle) == moduloRest) {
                                 //Particles only spawn 32 blocks away from the player. Might bypass in future
-                                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, primedTnt2.getX(), primedTnt2.getY(), primedTnt2.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
+                                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, primedTnt2.x, primedTnt2.y, primedTnt2.z, particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
                             }
                         } else {
                             primedTnt2.remove();
@@ -130,6 +131,6 @@ public class TNTFallingWand {
                 */
             }
         }
-        return InteractionResultHolder.success(itemStack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
     }
 }

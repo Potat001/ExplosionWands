@@ -3,6 +3,7 @@ package com.explosion_wands.wands;
 import com.explosion_wands.sharedValues.ExplosionEntities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -184,6 +185,6 @@ public class TNTExplodingBlocksWand {
             );
              */
         }
-        return InteractionResultHolder.success(itemStack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
     }
 }

@@ -40,9 +40,9 @@ public class TNTTornadoWand extends Item {
         double yIncrement = 0.5;
         int velocity = 10;
         BlockHitResult blockHitResult = (BlockHitResult) getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        double dirX = player.getX();
-        double dirY = player.getY();
-        double dirZ = player.getZ();
+        double dirX = player.x;
+        double dirY = player.y;
+        double dirZ = player.z;
         double scale = 5.0;
         double addedXDir = 0;
         double addedYDir = player.getEyeHeight() - 0.25;
@@ -73,11 +73,12 @@ public class TNTTornadoWand extends Item {
             customTnt.setEntityAmount(entityAmount);
             customTnt.setKillEntitiesAfterLoop(killEntitiesAfterLoop);
             customTnt.setYIncrement(yIncrement);
-            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+            level.playSound(null, player.x, player.y, player.z,
             SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, volume, pitch);
             return customTnt;
         }
         return null;
     }
-     */
+    */
+
 }

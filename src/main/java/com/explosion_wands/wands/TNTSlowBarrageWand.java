@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -97,7 +98,7 @@ public class TNTSlowBarrageWand {
                         //Performance improvement: Spawns a particle effect on each TNT that satisfy the modulus criteria instead of on each TNT
                         if ((finalI % moduloParticle) == moduloRest) {
                             //Particles only spawn 32 blocks away from the player. Might bypass in future
-                            serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, primedTnt.getX(), primedTnt.getY(), primedTnt.getZ(), particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
+                            serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, primedTnt.x, primedTnt.y, primedTnt.z, particleThickness, randomDistr, randomDistr, randomDistr, particleSpeed);
                         }
                         //Changes the initial angle by the value of angleStep every iteration so the TNTs are not frozen
                         angle[defaultValues] += angleStep;
@@ -108,19 +109,19 @@ public class TNTSlowBarrageWand {
                         serverLevel.addFreshEntity(primedTnt);
                         //Kind of a hacky way to play a sound only at the very start of the loop
                         if(finalI1 == 0) {
-//Makes the sound play as close to the y direction the player is at
-level.playSound(null,
-target.x,
-//Makes the sound play as close to the y direction the player is at
-target.y + spawnHeightSound[defaultValues],
-target.z,
-SoundEvents.TNT_PRIMED,
-SoundSource.PLAYERS,
-volume, pitch);
-}
-                    });
+						//Makes the sound play as close to the y direction the player is at
+							level.playSound(null,
+							target.x,
+							//Makes the sound play as close to the y direction the player is at
+							target.y + spawnHeightSound[defaultValues],
+							target.z,
+							SoundEvents.TNT_PRIMED,
+							SoundSource.PLAYERS,
+							volume, pitch);
+							}
+						});
                 }
 		}
-		return InteractionResultHolder.success(itemStack);
+		return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
 	}
 }

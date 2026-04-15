@@ -29,9 +29,9 @@ public class FireballShotgunWand extends Item {
         int explosionPowerAir = 9;
         //fireball's velocity
         double velocity = 5;
-        double dirX = player.getX();
-        double dirY = player.getY();
-        double dirZ = player.getZ();
+        double dirX = player.x;
+        double dirY = player.y;
+        double dirZ = player.z;
         double playerStartDirForwardScale = 2.5;
         double directlyUpScale = -0.25;
         double playerStartDirRightBlockHitX = 0;
@@ -79,7 +79,7 @@ public class FireballShotgunWand extends Item {
             server.addFreshEntity(fireballAir);
             changePos += incremented;
         }
-            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+            level.playSound(null, player.x, player.x, player.x,
             SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, volume, pitch);
         }
         return null;
